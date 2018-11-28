@@ -20,16 +20,30 @@ When you click the **Knit** button a document will be generated that includes bo
 data(zipcode)
 
 #takes a value for state and returns all the zipcodes from the state
-find_zips<-function(state_name){
+zips_from_state<-function(state_name){
   zip_holder<-zipcode%>%
     filter(state==state_name)%>%
     select(zip)
-  zip_state<-as.vector(zip_holder)
+  zip_state<-zip_holder[,1]
   return(zip_state)
 }
-zip.ri<-find_zips("RI")
-zip.ca<-find_zips("CA")
-zip.nd<-find_zips("ND")
+zip.ri<-zips_from_state("RI")
+zip.ca<-zips_from_state("CA")
+zip.nd<-zips_from_state("ND")
 
+```
+
+```{r}
+#takes a city name and returns all the zipcodes from the city
+zips_from_city<-function(city_name){
+    zip_holder<-zipcode%>%
+    filter(city==city_name)%>%
+    select(zip)
+  zip_city<-zip_holder[,1]
+  return(zip_city)
+}
+
+zip.pvd<-zips_from_city("Providence")
+zips.wantagh<-zips_from_city("Wantagh")
 
 ```
