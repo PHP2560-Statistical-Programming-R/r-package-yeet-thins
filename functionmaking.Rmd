@@ -1,0 +1,78 @@
+---
+title: "functionmaking"
+author: "Jackie Goldman"
+date: "November 28, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+options(scipen = 3, digits = 3)
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(error = TRUE)
+knitr::opts_chunk$set(warning=FALSE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(cache=T)
+knitr::opts_chunk$set(collapse=T)
+```
+
+```{r}
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+```
+
+```{r}
+#getting zipcode package
+library(zipcode)
+data(zipcode)
+zip.ri <- filter(zipcode,state=="RI")$zip #restricting to RI zip codes
+zip.ri <- as.vector(zip.ri)
+zip.ri<-zip.ri
+```
+
+
+```{r}
+#looping over zip codes and pages when there are more than 100 providers per zip code
+
+NPIcode<-function(zipcode){
+  url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" 
+  provider.data <- data.frame()
+  skips <- seq(0,2000,100) 
+  for (i in 1:length(zipcode)) {
+    for (j in 1:length(skips)){
+      zip <- zipcode[i]
+      skip <- skips[j]
+  url<-paste0(url1,zip,"&skip=",skip) 
+  
+  h <- read_html(url, timeout = 200)
+  reps <- h %>% 
+     html_node("table") %>%
+     html_table()
+    if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { 
+    break}
+  reps$zip <- zipcode[i]
+  provider.data <- rbind(provider.data,reps) 
+    }
+  }
+   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
+  return(provider.data)
+}
+
+provider.data <- NPIcode(zip.ri)
+```
+
+```{r}
+providernames <- c("Psychologist Addiction (Substance Use Disorder)", "Counselor Mental Health",  "Psychiatry & Neurology Psychiatry", "Social Worker Clinical", "Counselor Mental Health", "Counselor", "Psychologist Clinical", "Psychologist", "Marriage & Family", "Therapist", "Social Worker", "Clinic/Center Adult Mental Health") 
+
+filteredtable <- filter(provider.data,Primary_Taxonomy %in% providernames) 
+```
+
+
+
