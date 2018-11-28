@@ -76,15 +76,11 @@ library(censusr)
 geoid <- call_geolocator(provider.data$street[1],provider.data$city[1],provider.data$state[1])
 
 #county-level data
-call_census_api(variables_to_get="B06011_001E",geoids=geoid,allgeos='co',data_source="acs",api_key = Sys.getenv("CENSUS_TOKEN"))
+#call_census_api(variables_to_get="B06011_001E",geoids=geoid,allgeos='co',data_source="acs",api_key = Sys.getenv("CENSUS_TOKEN"))
 
 census <- read.csv("co-est2017-alldata.csv")
 #use POPESTIMATE2017 and CTYNAME for 2017 population estimates
 #if we want 2010 population use POPESTIMATE2010
-
-all.providers <- read.csv("npidata_pfile_20050523-20181111.csv")
-head(all.providers)
-
 ```
 
 ```{r}
