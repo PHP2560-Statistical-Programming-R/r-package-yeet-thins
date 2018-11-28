@@ -72,7 +72,10 @@ provider.data$state <- noquote( str_extract(provider.data$Primary_Practice_Addre
 
 library(censusr)
 
+#this function gives us Census block
+geoid <- call_geolocator(provider.data$street[1],provider.data$city[1],provider.data$state[1])
 
+call_census_api(variables_to_get,geoid)
 
 
 ```
