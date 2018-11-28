@@ -51,7 +51,7 @@ NPIcode<-function(zipcode){
       skip <- skips[j]
   url<-paste0(url1,zip,"&skip=",skip) 
   
-  h <- read_html(url, timeout = 200)
+  h <- read_html(url, timeout = 2000)
   reps <- h %>% 
      html_node("table") %>%
      html_table()
@@ -68,11 +68,8 @@ NPIcode<-function(zipcode){
 provider.data <- NPIcode(zip.ri)
 ```
 
-```{r}
-providernames <- c("Psychologist Addiction (Substance Use Disorder)", "Counselor Mental Health",  "Psychiatry & Neurology Psychiatry", "Social Worker Clinical", "Counselor Mental Health", "Counselor", "Psychologist Clinical", "Psychologist", "Marriage & Family", "Therapist", "Social Worker", "Clinic/Center Adult Mental Health") 
 
-filteredtable <- filter(provider.data,Primary_Taxonomy %in% providernames) 
-```
+
 
 ```{r}
 zcta_county_rel_10 <- read_csv("~/RA work continuous/Manuscript submissions/SAJ_suspected involvment of fentanyl/Resubmission/zcta_county_rel_10.txt")
