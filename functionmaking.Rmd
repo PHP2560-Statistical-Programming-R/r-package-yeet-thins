@@ -90,7 +90,8 @@ zcta_county_rel_10<-read.csv("zcta_county_rel_10.txt")
 #cleaning linking data so it can link with npi data
 zip_link<-zcta_county_rel_10 %>%
   select(ZCTA5, STATE, COUNTY, GEOID) %>%
-  rename(zipcode = ZCTA5)
+  rename(zipcode = ZCTA5) %>%
+  mutate(zipcode = as.character(zipcode))
 
 
 #joining the census link with the NPI data
@@ -101,8 +102,7 @@ head(NPI_join)
 #uploading census data
 census<-read.csv("~/GitHub/r-package-yeet-thins/co-est2017-alldata.csv")
 #make data type compatible
-census<-census %>%
-  mutate(COUNTY = as.character(COUNTY))
+
 
 #join link with census data
 
