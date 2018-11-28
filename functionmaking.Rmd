@@ -43,6 +43,8 @@ provider.data <- provider.data %>%
   mutate(zipcode = as.character(zipcode))
 
 ```
+
+
 ```{r}
 zcta_county_rel_10 <- read_csv("~/RA work continuous/Manuscript submissions/SAJ_suspected involvment of fentanyl/Resubmission/zcta_county_rel_10.txt")
 zcta_county_rel_10
@@ -50,21 +52,22 @@ zip_link<-zcta_county_rel_10 %>%
   select(ZCTA5, STATE, COUNTY, GEOID) %>%
   rename(zipcode = ZCTA5)
 
-NPI_join<-full_join(provider.data, zip_link, by="zipcode")
-
-
-
-```{r}
-
-#putting street address, city, and state in separate columns
-
+#cleaning the provider data
 provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)")) #street name and number
 
 provider.data$city <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=\t)[a-zA-Z_. -]+?(?=, )"))#city
 
 provider.data$state <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
 
-#now address is easy to work with
+#joining the census link with the NPI data
+
+NPI_join<-full_join(provider.data, zip_link, by="zipcode")
+head(NPI_join)
+```
+
+```{r}
+
+
 
 library(censusr)
 
