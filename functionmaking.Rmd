@@ -68,19 +68,20 @@ provider.data <- NPIcode_taxonomy(zip.ri,"Primary Care")
 ```
 
 ```{r}
-#make provider data zipcode as character
-provider.data <- provider.data %>%
-  mutate(zipcode = as.character(zipcode))
-
-```
-
-```{r}
 #cleaning the provider data
 provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)")) #street name and number
 
 provider.data$city <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=\t)[a-zA-Z_. -]+?(?=, )"))#city
 
-provider.data$state <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
+provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
+```
+
+```{r}
+#make provider data zipcode as character
+provider.data <- provider.data %>%
+  mutate(zipcode = as.character(zipcode))
+
+
 ```
 
 
@@ -90,8 +91,12 @@ zcta_county_rel_10<-read.csv("zcta_county_rel_10.txt")
 #cleaning linking data so it can link with npi data
 zip_link<-zcta_county_rel_10 %>%
   select(ZCTA5, STATE, COUNTY, GEOID) %>%
-  rename(zipcode = ZCTA5) %>%
-  mutate(zipcode = as.character(zipcode))
+  rename(zipcode = ZCTA5) 
+ 
+if(length(zip_link$zipcode)<5){
+  paste0("0", zipcode)}
+
+
 
 
 #joining the census link with the NPI data
@@ -110,20 +115,4 @@ NPI_to_census<-full_join(NPI_join, census, by=c("STATE", "COUNTY"))
 head(NPI_to_census)
 ```
 
-```{r}
-#getting census data into R
 
-head(census$COUNTY)
-
-library(censusr)
-
-#this function gives us census tract block
-geoid <- call_geolocator(provider.data$street[1],provider.data$city[1],provider.data$state[1])
-
-#county-level data
-call_census_api(variables_to_get="B06011_001E",geoids=geoid,allgeos='co',data_source="acs",api_key = Sys.getenv("CENSUS_TOKEN"))
-
-census <- read.csv("co-est2017-alldata.csv")
-#use POPESTIMATE2017 and CTYNAME for 2017 population estimates
-#if we want 2010 population use POPESTIMATE2010
-```
