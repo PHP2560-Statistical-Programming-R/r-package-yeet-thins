@@ -110,6 +110,8 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
    colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
   return(provider.data)
 }
+
+provider.data <- NPIcode_taxonomy(zip.ri,"Primary Care")
 ```
 
 
