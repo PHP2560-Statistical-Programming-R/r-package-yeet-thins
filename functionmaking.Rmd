@@ -50,9 +50,8 @@ zip_link<-zcta_county_rel_10 %>%
   select(ZCTA5, STATE, COUNTY, GEOID) %>%
   rename(zipcode = ZCTA5)
 
-NPI_join<-inner_join(provider.data, zip_link, by=NULL)
+NPI_join<-full_join(provider.data, zip_link, by="zipcode")
 
-```
 
 
 ```{r}
