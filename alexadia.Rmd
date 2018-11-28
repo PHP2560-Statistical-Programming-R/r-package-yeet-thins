@@ -79,7 +79,11 @@ filteredtable <- provider.data%>%
   return(filteredtable)
 }
 
-provider.data <- NPIcode(zip.ri, providertype)
+provider.data <- NPIcode(zip.ri, "Dermatology")
 provider.data
+
+```
+
+```{r}
 
 ```

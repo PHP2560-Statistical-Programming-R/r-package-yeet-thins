@@ -1,0 +1,72 @@
+---
+title: "Pull code"
+author: "Kari Kusler"
+date: "11/28/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+options(scipen = 3, digits = 3)
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(error = TRUE)
+knitr::opts_chunk$set(warning=FALSE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(cache=T)
+knitr::opts_chunk$set(collapse=T)
+```
+
+```{r}
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+```
+
+```{r}
+#getting zipcode package
+library(zipcode)
+data(zipcode)
+zip.ri <- filter(zipcode,state=="RI")$zip #restricting to RI zip codes
+zip.ri <- as.vector(zip.ri)
+zip.ri<-zip.ri
+```
+
+
+```{r}
+#looping over zip codes and pages when there are more than 100 providers per zip code
+
+NPIcode_taxonomy<-function(zipcode,taxonomy){
+  url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
+  provider.data <- data.frame() #initializing an empty data frame
+  skips <- seq(0,9999999999999999999999999999999999,100) #create skips
+  for (i in 1:length(zipcode)) { #iterating over all RI zip codes
+    for (j in 1:length(skips)){ #also iterating over skils
+      zip <- zipcode[i]
+      skip <- skips[j]
+      taxonomy = "primary"
+      tax <- str_replace_all(taxonomy," ","+")
+  url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
+  #text scrape to pull our places by zip code
+  h <- read_html(url, timeout = 200)
+  reps <- h %>% #setting up the repeating structure
+     html_node("table") %>%
+     html_table()
+    if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
+    break}
+  reps$zip <- zipcode[i]
+  provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
+    }
+  }
+   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
+  return(provider.data)
+}
+
+provider.data <- NPIcode(zip.ri)
+```
+
