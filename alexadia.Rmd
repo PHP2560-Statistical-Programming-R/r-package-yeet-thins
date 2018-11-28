@@ -16,7 +16,34 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r}
-#
+#zip codes for state
+data(zipcode)
 
+#takes a value for state and returns all the zipcodes from the state
+zips_from_state<-function(state_name){
+  zip_holder<-zipcode%>%
+    filter(state==state_name)%>%
+    select(zip)
+  zip_state<-zip_holder[,1]
+  return(zip_state)
+}
+zip.ri<-zips_from_state("RI")
+zip.ca<-zips_from_state("CA")
+zip.nd<-zips_from_state("ND")
+
+```
+
+```{r}
+#takes a city name and returns all the zipcodes from the city
+zips_from_city<-function(city_name){
+    zip_holder<-zipcode%>%
+    filter(city==city_name)%>%
+    select(zip)
+  zip_city<-zip_holder[,1]
+  return(zip_city)
+}
+
+zip.pvd<-zips_from_city("Providence")
+zips.wantagh<-zips_from_city("Wantagh")
 
 ```
