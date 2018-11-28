@@ -119,6 +119,20 @@ group_by_unit<-function(data, unit){
     arrange(n) 
     
     return(countbystate)
+  } else if (unit=="city"){
+    countbycity<-data%>%
+    group_by(city) %>% 
+    count() %>%
+    arrange(n) 
+    
+    return(countbycity)
+  } else if (unit=="type"){
+    countbyprovider<-data%>%
+    group_by(Primary_Taxonomy) %>% 
+    count() %>%
+    arrange(desc(n)) 
+    
+    return(countbyprovider)
   }
 }
 ```
