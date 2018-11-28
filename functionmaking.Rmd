@@ -55,7 +55,7 @@ provider.data$state <- noquote( str_extract(provider.data$Primary_Practice_Addre
 
 ```{r}
 #getting the file that links zip codes to census data
-zcta_county_rel_10<-read.csv("~/GitHub/r-package-yeet-thins/zcta_county_rel_10.txt")
+zcta_county_rel_10<-read.csv("zcta_county_rel_10.txt")
 #cleaning linking data so it can link with npi data
 zip_link<-zcta_county_rel_10 %>%
   select(ZCTA5, STATE, COUNTY, GEOID) %>%
