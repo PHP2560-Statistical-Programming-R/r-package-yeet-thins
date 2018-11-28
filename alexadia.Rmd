@@ -92,6 +92,36 @@ providr_describr<-function(stat, data){
 ```
 
 ```{r}
+primary_care_data<-NPIcode(zip.ri, "primary care")
+
+```
+
+```{r}
+group_by_unit<-function(data, unit){
+  if(unit=="zipcode"){
+    countbyzip<-data%>%
+    group_by(zipcode) %>% 
+    count() %>%
+    arrange(n) 
+    
+    return(countbyzip)
+  } else if (unit==="county") {
+    countbycounty<-data%>%
+    group_by(county) %>% 
+    count() %>%
+    arrange(n) 
+    
+    return(countbycounty)
+  } else if (unit=="state"){
+    countbystate<-data%>%
+    group_by(state) %>% 
+    count() %>%
+    arrange(n) 
+    
+    return(countbystate)
+  }
+}
+```
 ```{r}
 countbyzip <- provider.data %>% #creating a count of practices by zip code
 group_by(zipcode) %>% 
@@ -100,7 +130,7 @@ arrange(n)
 
 #countbyzip
 #create a bar graph of providers by frequency
-plot<-ggplot(countbyzip, aes(x=zipcode, y=n))+
+plot<-ggplot(countbyzip, aes(x=zipcode, y=n, fill="#FF6666"))+
   geom_bar(stat="identity")
 plot
 
