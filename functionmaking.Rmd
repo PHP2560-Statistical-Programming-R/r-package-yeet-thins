@@ -63,11 +63,22 @@ provider.data$state <- noquote( str_extract(provider.data$Primary_Practice_Addre
 
 NPI_join<-full_join(provider.data, zip_link, by="zipcode")
 head(NPI_join)
+
+#uploading census data
+census <- read.csv("~/Masters Semester 3/Programming/co-est2017-alldata.csv")
+#make data type compatible
+census<-census %>%
+  mutate(COUNTY = as.character(COUNTY))
+
+#join link with census data
+
+NPI_to_census<-right_join(NPI_join, census, by=c("STATE", "COUNTY"))
+head(NPI_to_census)
 ```
 
 ```{r}
 #getting census data into R
-census <- read.csv("~/Masters Semester 3/Programming/co-est2017-alldata.csv")
+
 head(census$COUNTY)
 
 library(censusr)
