@@ -1,43 +1,60 @@
+---
+title: "alexadia"
+author: "Alexander Adia"
+date: "November 28, 2018"
+output: html_document
+---
 
 ```{r setup, include=FALSE}
-options(scipen = 3, digits = 3)
-knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(error = TRUE)
-knitr::opts_chunk$set(warning=FALSE)
-knitr::opts_chunk$set(message=FALSE)
-knitr::opts_chunk$set(cache=T)
-knitr::opts_chunk$set(collapse=T)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
-library(rvest)
-library(httr)
-library(dplyr)
-library(jsonlite)
-library(XML)
-library(stringr)
-library(zipcode)
-library(dplyr)
-library(stringr)
-library(ggplot2)
-```
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r}
-#getting zipcode package
-library(zipcode)
+#zip codes for state
 data(zipcode)
-zip.ri <- filter(zipcode,state=="RI")$zip #restricting to RI zip codes
-zip.ri <- as.vector(zip.ri)
-zip.ri<-zip.ri
+
+#takes a value for state and returns all the zipcodes from the state
+zips_from_state<-function(state_name){
+  zip_holder<-zipcode%>%
+    filter(state==state_name)%>%
+    select(zip)
+  zip_state<-zip_holder[,1]
+  return(zip_state)
+}
+zip.ri<-zips_from_state("RI")
+zip.ca<-zips_from_state("CA")
+zip.nd<-zips_from_state("ND")
+
 ```
 
+```{r}
+#takes a city name and returns all the zipcodes from the city
+zips_from_city<-function(city_name){
+    zip_holder<-zipcode%>%
+    filter(city==city_name)%>%
+    select(zip)
+  zip_city<-zip_holder[,1]
+  return(zip_city)
+}
+
+zip.pvd<-zips_from_city("Providence")
+zips.wantagh<-zips_from_city("Wantagh")
+
+```
 
 ```{r}
-#looping over zip codes and pages when there are more than 100 providers per zip code
-NPIcode<-function(zipcode){
+   providertype <- c("Psychologist Addiction (Substance Use Disorder)", "Counselor Mental Health",  "Psychiatry & Neurology Psychiatry", "Social Worker Clinical", "Counselor Mental Health", "Counselor", "Psychologist Clinical", "Psychologist", "Marriage & Family", "Therapist", "Social Worker", "Clinic/Center Adult Mental Health") 
+
+NPIcode<-function(zipcode, providertype){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
-  skips <- seq(0,2000,100) #create skips
+  skips <- seq(0,9999999999,100) #create skips
   for (i in 1:length(zipcode)) { #iterating over all RI zip codes
     for (j in 1:length(skips)){ #also iterating over skils
       zip <- zipcode[i]
@@ -55,60 +72,14 @@ NPIcode<-function(zipcode){
     }
   }
    colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-  return(provider.data)
+
+filteredtable <- provider.data%>%
+    filter(Primary_Taxonomy %in% providertype) 
+
+  return(filteredtable)
 }
-provider.data <- NPIcode(zip.ri)
-```
 
-```{r}
-Mental_Health_Providers <- c("Psychologist Addiction (Substance Use Disorder)", "Counselor Mental Health",  "Psychiatry & Neurology Psychiatry", "Social Worker Clinical", "Counselor Mental Health", "Counselor", "Psychologist Clinical", "Psychologist", "Marriage & Family", "Therapist", "Social Worker", "Clinic/Center Adult Mental Health") #creating a vector of types of provider taxonomies
-filteredtable <- filter(provider.data,Primary_Taxonomy %in% Mental_Health_Providers) #creating a filtered dataset by provider taxonomies
-```
+provider.data <- NPIcode(zip.ri, providertype)
+provider.data
 
-
-```{r}
-countbyzip <- provider.data %>% #creating a count of practices by zip code
-group_by(zipcode) %>% 
-count() %>%
-arrange(n) 
-#countbyzip
-#create a bar graph of providers by frequency
-plot<-ggplot(countbyzip, aes(x=zipcode, y=n))+
-  geom_bar(stat="identity")
-print(plot + ggtitle("Frequency of providers by zipcode"))
-#number of counties with 1 provider, 2 providers, etc
-number_practices<-countbyzip %>%
-  select(n) %>% #selecting and grouping by frequency
-  group_by(n) %>%
-  count() %>%
-  arrange(n) #arranging by frequency
-number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
-#add axis names
-plot<-ggplot(number_practices.low, aes(x=factor(n), y=nn))+
-  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
-print(plot + ggtitle("The number of providers by zipcode"))
-```
-
-```{r}
-#Graphs of Provider Type
-provider_grouping<-provider.data %>% #creating a count of practices by providers
-group_by(Primary_Taxonomy) %>% 
-count() %>%
-arrange(desc(n)) 
-#provider_grouping
-#general scatter of all providers types
-provider_scatter<-ggplot(provider_grouping, aes(x=Primary_Taxonomy, y=n))+
- geom_point()+
-    theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())+
-  labs(x = "Provider Types", y = "Number of providers")+
-  scale_color_brewer(palette="Set1")
-print(provider_scatter + ggtitle("Number of providers by provider taxonomy"))
-#create a bar graph of top 5 providers by frequency
-top5providers<-head(provider_grouping)
-providers_bar<-ggplot(top5providers, aes(x=Primary_Taxonomy, y=n))+
-  geom_bar(stat="identity")+
-  theme(axis.text.x = element_text(angle=90))+
-  labs(x = "Provider Type", y = "Number of Providers")
-print(providers_bar +ggtitle("The five most common provider taxonomies"))
 ```
