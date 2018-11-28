@@ -72,10 +72,17 @@ provider.data$state <- noquote( str_extract(provider.data$Primary_Practice_Addre
 
 library(censusr)
 
-#this function gives us Census block
+#this function gives us census tract block
 geoid <- call_geolocator(provider.data$street[1],provider.data$city[1],provider.data$state[1])
 
-call_census_api(variables_to_get,geoid)
+#county-level data
+call_census_api(variables_to_get="B06011_001E",geoids=geoid,allgeos='co',data_source="acs",api_key = Sys.getenv("CENSUS_TOKEN"))
+
+census <- read.csv("co-est2017-alldata.csv")
+#use POPESTIMATE2017 and CTYNAME for 2017 population estimates
+#if we want 2010 population use POPESTIMATE2010
+
+
 
 
 ```
