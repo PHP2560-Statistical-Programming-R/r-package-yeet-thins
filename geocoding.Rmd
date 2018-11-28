@@ -33,7 +33,7 @@ zip.ri<-zip.ri
 NPIcode<-function(zipcode){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
-  skips <- seq(0,2000,100) #create skips
+  skips <- seq(0,20000,100) #create skips
   for (i in 1:length(zipcode)) { #iterating over all RI zip codes
     for (j in 1:length(skips)){ #also iterating over skils
       zip <- zipcode[i]
