@@ -72,7 +72,7 @@ census<-census %>%
 
 #join link with census data
 
-NPI_to_census<-right_join(NPI_join, census, by=c("STATE", "COUNTY"))
+NPI_to_census<-full_join(NPI_join, census, by=c("STATE", "COUNTY"))
 head(NPI_to_census)
 ```
 
