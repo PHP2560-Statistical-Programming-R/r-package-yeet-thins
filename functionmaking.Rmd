@@ -43,21 +43,24 @@ provider.data <- provider.data %>%
   mutate(zipcode = as.character(zipcode))
 
 ```
-
-
 ```{r}
-zcta_county_rel_10 <- read_csv("~/RA work continuous/Manuscript submissions/SAJ_suspected involvment of fentanyl/Resubmission/zcta_county_rel_10.txt")
-zcta_county_rel_10
-zip_link<-zcta_county_rel_10 %>%
-  select(ZCTA5, STATE, COUNTY, GEOID) %>%
-  rename(zipcode = ZCTA5)
-
 #cleaning the provider data
 provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)")) #street name and number
 
 provider.data$city <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=\t)[a-zA-Z_. -]+?(?=, )"))#city
 
 provider.data$state <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
+```
+
+
+```{r}
+#getting the file that links zip codes to census data
+zcta_county_rel_10<-read.csv("~/GitHub/r-package-yeet-thins/zcta_county_rel_10.txt")
+#cleaning linking data so it can link with npi data
+zip_link<-zcta_county_rel_10 %>%
+  select(ZCTA5, STATE, COUNTY, GEOID) %>%
+  rename(zipcode = ZCTA5)
+
 
 #joining the census link with the NPI data
 
@@ -65,7 +68,7 @@ NPI_join<-full_join(provider.data, zip_link, by="zipcode")
 head(NPI_join)
 
 #uploading census data
-census <- read.csv("~/Masters Semester 3/Programming/co-est2017-alldata.csv")
+census<-read.csv("~/GitHub/r-package-yeet-thins/co-est2017-alldata.csv")
 #make data type compatible
 census<-census %>%
   mutate(COUNTY = as.character(COUNTY))
