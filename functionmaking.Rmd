@@ -67,8 +67,8 @@ head(NPI_join)
 
 ```{r}
 #getting census data into R
-census <- read.csv("co-est2017-alldata.csv")
-
+census <- read.csv("~/Masters Semester 3/Programming/co-est2017-alldata.csv")
+head(census$COUNTY)
 
 library(censusr)
 
