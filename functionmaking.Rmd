@@ -85,7 +85,7 @@ provider.data
 
 ```
 ##Comment
-The next lines of code all have been added into the mega function
+The next lines of code all have been added into the mega-function. I have kept the original code for safekeeping.
 ```{r}
 #cleaning the provider data
 provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)")) #street name and number
