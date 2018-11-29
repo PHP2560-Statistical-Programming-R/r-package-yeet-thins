@@ -59,13 +59,30 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
     break}
   reps$zip <- zipcode[i]
   provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
+  
     }
   }
-   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-  return(provider.data)
+   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode") #the next three lines clean the data set
+   provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)"))
+   provider.data$city <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=\t)[a-zA-Z_. -]+?(?=, )"))
+   provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)"))
+   provider.data <- provider.data %>% #sets the zipcode into a character
+   mutate(zipcode = as.character(zipcode))
+zcta_county_rel_10<-read.csv("zcta_county_rel_10.txt") #brings in a data set that is needed to link NPI data to census data
+zip_link<-zcta_county_rel_10 %>%
+  select(ZCTA5, STATE, COUNTY, GEOID) %>% #keeping only the columns we need
+  rename(zipcode = ZCTA5) %>%
+  mutate(zipcode = as.character(zipcode)) #makes zipcodes into character
+zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0") #adds 0's so that all zip codes are the same length
+NPI_join<-full_join(provider.data.work, zip_link, by="zipcode") #joins NPI data to linking data set
+census<-read.csv("co-est2017-alldata.csv") #read in census data
+NPI_to_census<-full_join(NPI_join, census, by=c("STATE", "COUNTY")) #joins linked data set to census data
+  return(NPI_to_census) #returns the fully joined data set
 }
 
 provider.data <- NPIcode_taxonomy(zip.ri,"Primary Care")
+provider.data
+
 ```
 
 ```{r}
@@ -79,7 +96,7 @@ provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Ad
 
 ```{r}
 #make provider data zipcode as character
-provider.data.work <- provider.data %>%
+provider.data <- provider.data %>%
   mutate(zipcode = as.character(zipcode))
 
 
