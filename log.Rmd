@@ -7,3 +7,6 @@ output: html_document
 
 #Change Log
 This is a change log. You are responsible for writing the date and change you are working on. -AA
+
+##Census join completed
+On 11/29/2018, at 1:59pm, Jackie successfully joined the provider data set to a linking data set to census data. She feels victorious
