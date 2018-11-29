@@ -84,7 +84,8 @@ provider.data <- NPIcode_taxonomy(zip.ri,"Primary Care")
 provider.data
 
 ```
-
+##Comment
+The next lines of code all have been added into the mega function
 ```{r}
 #cleaning the provider data
 provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)")) #street name and number
@@ -123,11 +124,7 @@ head(NPI_join)
 
 #uploading census data
 census<-read.csv("co-est2017-alldata.csv")
-#make data type compatible
-head(census)
-census <- state.abb
 
-state_abbrev <- read.csv("state_abbrev.txt")
 
 
 #join link with census data and it works
