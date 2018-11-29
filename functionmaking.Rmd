@@ -107,6 +107,10 @@ head(NPI_join)
 #uploading census data
 census<-read.csv("co-est2017-alldata.csv")
 #make data type compatible
+head(census)
+census <- state.abb
+
+state_abbrev <- read.csv("state_abbrev.txt")
 
 
 #join link with census data and it works

@@ -1,0 +1,9 @@
+---
+title: "Change Log"
+author: "Alexander Adia"
+date: "November 28, 2018"
+output: html_document
+---
+
+#Change Log
+This is a change log. You are responsible for writing the date and change you are working on. -AA
