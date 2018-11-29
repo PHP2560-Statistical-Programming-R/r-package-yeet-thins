@@ -59,11 +59,7 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
     break}
   reps$zip <- zipcode[i]
   provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
-  
-    }
-  }
-   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode") #the next three lines clean the data set
-   provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)"))
+  provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)"))
    provider.data$city <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=\t)[a-zA-Z_. -]+?(?=, )"))
    provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)"))
    provider.data <- provider.data %>% #sets the zipcode into a character
@@ -77,11 +73,16 @@ zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0") #adds 0's so that all
 NPI_join<-full_join(provider.data.work, zip_link, by="zipcode") #joins NPI data to linking data set
 census<-read.csv("co-est2017-alldata.csv") #read in census data
 NPI_to_census<-full_join(NPI_join, census, by=c("STATE", "COUNTY")) #joins linked data set to census data
-  return(NPI_to_census) #returns the fully joined data set
-}
+    }
+  }
+   colnames(NPI_to_census) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode") #the next three lines clean the data set
+   return(NPI_to_census) #returns the fully joined data set
+   }
 
 provider.data <- NPIcode_taxonomy(zip.ri,"Primary Care")
 provider.data
+test2<-NPIcode_taxonomy(06611, "Primary Care")
+test2
 
 ```
 ##Comment
