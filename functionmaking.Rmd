@@ -43,7 +43,6 @@ zip.ri<-zip.ri
 ```
 
 ```{r}
-#this does not currently work, so skip down below and use all smaller functions
 NPIcode_taxonomy<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
