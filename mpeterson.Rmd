@@ -171,9 +171,21 @@ head(NPI_to_census)
 
 
 ```{r}
-providers_per_1000_zip <- function(taxonomy, zipcode) {
-numberprovidersper1000zip <- length(NPIcode_taxonomy(taxonomy, zipcode))
-ratio <- numberprovidersper1000state / #census population / 1000
+
+#I made this function that will take the length of the output of the taxonomy by county (I just called it NPIcode_taxonomy because it doesn't exist yet) and divides it by the population of the county pulled from census .csv data divided by 1000
+
+providers_per_1000_county <- function(taxonomy, county, state) {
+numberprovidersper1000county <- length(NPIcode_taxonomy(taxonomy, county))
+
+population <- c()
+for (i in length(census)) {
+  if (census$STNAME == state) {
+    if (census$CTYNAME == county) {
+      population <- census$CENSUS2010POP / 1000
+    }
+  }
+}
+ratio <- numberprovidersper1000county / population
 }
 
 #we want to probably use dplyr to select the rows in the table that correspond to the geographic region 
