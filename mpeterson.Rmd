@@ -186,6 +186,7 @@ for (i in length(census)) {
   }
 }
 ratio <- numberprovidersper1000county / population
+return(ratio)
 }
 
 #we want to probably use dplyr to select the rows in the table that correspond to the geographic region 
