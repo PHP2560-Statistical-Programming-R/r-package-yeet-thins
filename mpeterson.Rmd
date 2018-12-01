@@ -173,11 +173,16 @@ head(NPI_to_census)
 ```{r}
 providers_per_1000_zip <- function(taxonomy, zipcode) {
 numberprovidersper1000zip <- length(NPIcode_taxonomy(taxonomy, zipcode))
-ratio <- return(numberprovidersper1000state) / #census population / 1000
+ratio <- numberprovidersper1000state / #census population / 1000
 }
 
 
 ```
+
+#other stuff we want to do:
+#1) make visualizations for each zip code 
+#2) find a way to combine multiple zip codes for a query (i.e. look at #providers/every 1000 people for a few different zip codes at once)
+#3) do this at state and county levels? 
 
 ```{r}
 
