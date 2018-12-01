@@ -1,26 +1,9 @@
 ---
-title: "Compiled Pull Code"
-author: "Alex, Meghan, Jackie, Kari"
+title: "functionmaking"
+author: "Jackie Goldman"
 date: "November 28, 2018"
-output: pdf_document
+output: html_document
 ---
-
-##Background
-In general,it can be difficult to find a mental health care provider that meets your needs. There are many different designations of mental health care providers and sometimes, it can be difficult to find the right type of provider. The goal of this project was to gather all the health care providers in Rhode Island, and determine the number of providers by ZIP code, with an emphasis on mental health providers.
-
-##The Data
-We used the National Plan and Provider Enumeration System National Provider Identifier (NPI) database to find medical providers. We included all Rhode Island ZIP codes when iterating through the NPI database. We wrote a function to search through the database using all zipcodes in Rhode Island to create a table of all providers. From there, the program sorts through provider taxonomies to select providers that we designated as mental health providers.
-
-##The graphs
-The first graph shows. all zip codes and the number of providers in each one.
-
-The second bar graph breaks down how many mental health care providers are in different ZIP codes, from 1 to 11 providers. From this, we learned that there are four ZIP codes with only 1 provider, 6 ZIP codes with two providers, and on the other side, there is only one ZIP code with 11 providers. Note that ZIP codes with 0 providers are not represented in any of these graphs.
-
-The next two graphs show the number of any type of provider, not limited to mental health providers.
-
-The scatter plot shows the number of providers in each RI ZIP code. We can see that most ZIP codes have few providers, with three outliers having more than 1,000 providers. We postulate that these ZIP codes are likely located in major cities.
-
-The final graph shows the number of providers in the top six specialties. We can see that clinical social work is the most common specialty, followed by internal medicine and physical therapy.
 
 ```{r setup, include=FALSE}
 options(scipen = 3, digits = 3)
@@ -43,7 +26,12 @@ library(zipcode)
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(stringi)
+library(roxygen2)
+library(testthat)
+devtools::install_github(("r-lib/devtools"))
 ```
+
 
 ```{r}
 #getting zipcode package
@@ -52,37 +40,6 @@ data(zipcode)
 zip.ri <- filter(zipcode,state=="RI")$zip #restricting to RI zip codes
 zip.ri <- as.vector(zip.ri)
 zip.ri<-zip.ri
-```
-
-
-```{r}
-#looping over zip codes and pages when there are more than 100 providers per zip code
-
-NPIcode<-function(zipcode){
-  url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
-  provider.data <- data.frame() #initializing an empty data frame
-  skips <- seq(0,9999999,100) #create skips
-  for (i in 1:length(zipcode)) { #iterating over all RI zip codes
-    for (j in 1:length(skips)){ #also iterating over skils
-      zip <- zipcode[i]
-      skip <- skips[j]
-  url<-paste0(url1,zip,"&skip=",skip) #pasting the url, with the rhode island zip code and including the skips
-  #text scrape to pull our places by zip code
-  h <- read_html(url, timeout = 200)
-  reps <- h %>% #setting up the repeating structure
-     html_node("table") %>%
-     html_table()
-    if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
-    break}
-  reps$zip <- zipcode[i]
-  provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
-    }
-  }
-   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-  return(provider.data)
-}
-
-provider.data <- NPIcode(zip.ri)
 ```
 
 ```{r}
@@ -108,79 +65,122 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
     }
   }
    colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
+
+   provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)")) #street name and number
+   provider.data$city <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=\t)[a-zA-Z_. -]+?(?=, )"))#city
+   provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
+   provider.data<-mutate(provider.data, zipcode= as.character(zipcode))
+  
+   zip_link<-read.csv("zcta_county_rel_10.txt") %>%
+  select(ZCTA5, STATE, COUNTY, GEOID) %>%
+  rename(zipcode = ZCTA5) %>%
+  mutate(zipcode = as.character(zipcode))
+zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
+
+NPI_join<-full_join(provider.data, zip_link, by="zipcode")
+census<-read.csv("co-est2017-alldata.csv")
+
+NPI_to_census<-full_join(NPI_join, census, by=c("STATE", "COUNTY"))
+   return(NPI_to_census)
+   }
+
+provider.data <- NPIcode_taxonomy("02906","Mental Health")
+provider.data
+
+
+```
+##Comment
+The next lines of code all have been added into the mega-function. I have kept the original code for safekeeping.
+```{r}
+
+NPIcode_taxonomy<-function(zipcode,taxonomy){
+  url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
+  provider.data <- data.frame() #initializing an empty data frame
+  skips <- seq(0,9999999,100) #create skips
+  for (i in 1:length(zipcode)) { #iterating over all RI zip codes
+    for (j in 1:length(skips)){ #also iterating over skils
+      zip <- zipcode[i]
+      skip <- skips[j]
+      tax <- str_replace_all(taxonomy," ","+")
+  url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
+  #text scrape to pull our places by zip code
+  h <- read_html(url, timeout = 200)
+  reps <- h %>% #setting up the repeating structure
+     html_node("table") %>%
+     html_table()
+    if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
+    break}
+  reps$zip <- zipcode[i]
+  provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
+    }
+  }
+   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
   return(provider.data)
 }
+provider.data<-NPIcode_taxonomy("02906", "Mental Healt")
+provider.data
+
+```
+```{r}
+#cleaning the provider data
+provider.data$street <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="^[a-zA-Z0-9_. -]+?(?=\n)")) #street name and number
+
+provider.data$city <- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=\t)[a-zA-Z_. -]+?(?=, )"))#city
+
+provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
+```
+
+```{r}
+#make provider data zipcode as character
+provider.data <- provider.data %>%
+  mutate(zipcode = as.character(zipcode))
+
+
 ```
 
 
 ```{r}
-NPIcode_taxonomy(02906, "&Physician_Assistant")
+#getting the file that links zip codes to census data
+zcta_county_rel_10<-read.csv("zcta_county_rel_10.txt")
+zip_link<-zcta_county_rel_10 %>%
+  select(ZCTA5, STATE, COUNTY, GEOID) %>%
+  rename(zipcode = ZCTA5) %>%
+  mutate(zipcode = as.character(zipcode))
+  
+#trying to add zeros back into zipcodes
+zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
+head(zip_link$zipcode)
+
+
+#joining the census link with the NPI data
+
+NPI_join<-full_join(provider.data, zip_link, by="zipcode")
+head(NPI_join)
+
+#uploading census data
+census<-read.csv("co-est2017-alldata.csv")
+
+
+
+#join link with census data and it works
+#yeet
+
+NPI_to_census<-full_join(NPI_join, census, by=c("STATE", "COUNTY"))
+head(NPI_to_census)
 ```
 
 
 ```{r}
-providernames <- c("Psychologist Addiction (Substance Use Disorder)", "Counselor Mental Health",  "Psychiatry & Neurology Psychiatry", "Social Worker Clinical", "Counselor Mental Health", "Counselor", "Psychologist Clinical", "Psychologist", "Marriage & Family", "Therapist", "Social Worker", "Clinic/Center Adult Mental Health") #creating a vector of types of provider taxonomies
+providers_per_1000_zip <- function(taxonomy, zipcode) {
+numberprovidersper1000state <- NPIcode_taxonomy(taxonomy, zipcode)
+ratio <- return(numberprovidersper1000state) / census
+}
 
-filteredtable <- filter(provider.data,Primary_Taxonomy %in% providernames) #creating a filtered dataset by provider taxonomies
-```
 
-
-```{r}
-countbyzip <- provider.data %>% #creating a count of practices by zip code
-group_by(zipcode) %>% 
-count() %>%
-arrange(n) 
-
-#countbyzip
-#create a bar graph of providers by frequency
-plot<-ggplot(countbyzip, aes(x=zipcode, y=n))+
-  geom_bar(stat="identity")
-plot
-
-#number of counties with 1 provider, 2 providers, etc
-
-number_practices<-countbyzip %>%
-  select(n) %>% #selecting and grouping by frequency
-  group_by(n) %>%
-  count() %>%
-  arrange(n) #arranging by frequency
-number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
-
-#add axis names
-plot<-ggplot(number_practices.low, aes(x=factor(n), y=nn))+
-  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
-plot
 ```
 
 ```{r}
-#Graphs of Provider Type
-provider_grouping<-provider.data %>% #creating a count of practices by providers
-group_by(Primary_Taxonomy) %>% 
-count() %>%
-arrange(desc(n)) 
-#provider_grouping
 
-#general scatter of all providers types
-provider_scatter<-ggplot(provider_grouping, aes(x=Primary_Taxonomy, y=n))+
- geom_point()+
-    theme(axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())+
-  labs(x = "Provider Types", y = "Number of providers")+
-  scale_color_brewer(palette="Set1")
-provider_scatter
-
-#create a bar graph of top 5 providers by frequency
-top5providers<-head(provider_grouping)
-providers_bar<-ggplot(top5providers, aes(x=Primary_Taxonomy, y=n))+
-  geom_bar(stat="identity")+
-  theme(axis.text.x = element_text(angle=90))+
-  labs(x = "Provider Type", y = "Number of Providers")
-providers_bar
+NPIcode_taxonomy(02906, "mental health")
 
 ```
-
-
-providerbyunit <- provider.data %>% #creating a count of practices by zip code
-group_by(zipcode) %>% 
-count() %>%
-arrange(n) 
