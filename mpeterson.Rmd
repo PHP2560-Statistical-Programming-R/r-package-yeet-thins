@@ -189,7 +189,6 @@ ratio <- numberprovidersper1000county / population
 return(ratio)
 }
 
-#we want to probably use dplyr to select the rows in the table that correspond to the geographic region 
 
 #other stuff we want to do:
 #1) make visualizations for each zip code 
