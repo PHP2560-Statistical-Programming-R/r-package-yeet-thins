@@ -192,24 +192,24 @@ providers_bar
 
 ```{r}
 
-NPIcode_taxonomy<-function(zipcode,taxonomy){
+county_collect_NPIcode_taxonomy<-function(county,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
-  for (i in 1:length(zipcode)) { #iterating over all RI zip codes
+  for (i in 1:length(county)) { #iterating over all counties
     for (j in 1:length(skips)){ #also iterating over skils
-      zip <- zipcode[i]
+      county_index <- county[i]
       skip <- skips[j]
       tax <- str_replace_all(taxonomy," ","+")
-  url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
-  #text scrape to pull our places by zip code
+  url<-paste0(url1,count_index,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the county and including the skips
+  #text scrape to pull our places by county
   h <- read_html(url, timeout = 200)
   reps <- h %>% #setting up the repeating structure
      html_node("table") %>%
      html_table()
-    if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
+    if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next county
     break}
-  reps$zip <- zipcode[i]
+  reps$county <- county[i]
   provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
