@@ -191,7 +191,7 @@ providers_bar
 ```
 
 ```{r}
-
+#problem: no way to get county from these codes, maybe from this data? https://www.unitedstateszipcodes.org/zip-code-database/
 county_collect_NPIcode_taxonomy<-function(county,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
