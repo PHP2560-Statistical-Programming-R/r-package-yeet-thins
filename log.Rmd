@@ -10,3 +10,31 @@ This is a change log. You are responsible for writing the date and change you ar
 
 ##Census join completed
 On 11/29/2018, at 1:59pm, Jackie successfully joined the provider data set to a linking data set to census data. She feels victorious
+
+
+##what we have done
+Meghan wrote code over the weekend that makes a provider density function by state, but NPI doesnt have states
+Alex calls from Zipcodes in a given state, if you want to take zip codes and call out state
+Also if put in location, it puts out a data frame
+Jackie's function using the provider taxonomy and zipcode, to the census data
+but gives you county at each row
+
+##What we hope the function does
+Our function should provide output at the county level, looking at provider density per county and per state.
+
+##what do we still need to do
+We want to be able to have it so that people can put in state or zip and taxonomy and get provider density
+and get visualization, also maybe maping 
+
+##other kinds of visualizations
+use some of the graphs from project for this
+
+##random cool shit we might aim for
+Maps, maps, maps
+
+
+##Roles as of 11/30/2018
+Alex: visualization function
+Jackie:Compiling package
+Kari: Maps with Meghan and overall assisting and debug help
+Meghan: provider density functions
