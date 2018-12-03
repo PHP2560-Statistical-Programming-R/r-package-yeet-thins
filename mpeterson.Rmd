@@ -176,7 +176,6 @@ head(NPI_to_census)
 
 providers_per_1000_county <- function(taxonomy, county, state) {
 numberprovidersper1000county <- length(NPIcode_taxonomy(taxonomy, county))
-
 population <- c()
 for (i in length(census)) {
   if (census$STNAME == state) {
@@ -191,12 +190,20 @@ return(ratio)
 
 
 #other stuff we want to do:
-#1) make visualizations for each zip code 
-#2) find a way to combine multiple zip codes for a query (i.e. look at #providers/every 1000 people for a few different zip codes at once)
-#3) do this at state and county levels? 
+#1) make visualizations for each state
+#2) find a way to combine multiple states for a query (i.e. look at #providers/every 1000 people for a few different statess at once)
+#3) do this at county level
 
-```{r}
 
-NPIcode_taxonomy(02906, "mental health")
+plot<-ggplot(number_practices.low, aes(x=factor(n), y=nn))+
+  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
+print(plot + ggtitle("The number of providers by zipcode"))
+
+
+
+
+
+```
+
 
 ```
