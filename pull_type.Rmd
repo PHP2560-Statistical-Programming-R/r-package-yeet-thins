@@ -44,12 +44,11 @@ zip.ri<-zip.ri
 NPIcode_taxonomy<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
-  skips <- seq(0,9999999999999999999999999999999999,100) #create skips
+  skips <- seq(0,9999999,100) #create skips
   for (i in 1:length(zipcode)) { #iterating over all RI zip codes
     for (j in 1:length(skips)){ #also iterating over skils
       zip <- zipcode[i]
       skip <- skips[j]
-      taxonomy = "primary"
       tax <- str_replace_all(taxonomy," ","+")
   url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
   #text scrape to pull our places by zip code
@@ -67,6 +66,7 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   return(provider.data)
 }
 
-provider.data <- NPIcode(zip.ri)
+provider.data <- NPIcode_taxonomy(zip.ri,"primary care")
+head(provider.data)
 ```
 
