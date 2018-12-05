@@ -1,4 +1,4 @@
-Num_provider_in_county<-function(zipcode,taxonomy){
+dens_by_zip<-Num_provider_in_county<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -36,6 +36,7 @@ Num_provider_in_county<-function(zipcode,taxonomy){
   census<-read.csv("co-est2017-alldata.csv")
 
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-  return(nrow(NPI_to_census))
+  dens_by_zip<-nrow(NPI_to_census)/(mean(NPI_to_census$CENSUS2010POP, na.rm=T)/1000)
+  return(dens_by_zip)
 }
-
+dens_by_zip("02906", "Primary Care")
