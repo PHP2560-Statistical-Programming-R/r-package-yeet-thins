@@ -51,7 +51,7 @@ zips_used <- zips_from_state(state)
   }
 
   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-  
+
   zip_link<-read.csv("zcta_county_rel_10.txt") %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
@@ -72,9 +72,7 @@ zips_used <- zips_from_state(state)
 
 }
 
-
-
-provider.data<-NPIcode_taxonomy("NY", "Mental Health")
+provider.data<-providers_in_state_by_county("RI", "Mental Health")
 
 
 
