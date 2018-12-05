@@ -178,19 +178,50 @@ providers_bar
 
 
 ```{r}
+#problem: no way to get county from these codes, maybe from this data? https://www.unitedstateszipcodes.org/zip-code-database/
+county_collect_NPIcode_taxonomy<-function(county,taxonomy){
+  url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
+  provider.data <- data.frame() #initializing an empty data frame
+  skips <- seq(0,9999999,100) #create skips
+  for (i in 1:length(county)) { #iterating over all counties
+    for (j in 1:length(skips)){ #also iterating over skils
+      county_index <- county[i]
+      skip <- skips[j]
+      tax <- str_replace_all(taxonomy," ","+")
+  url<-paste0(url1,count_index,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the county and including the skips
+  #text scrape to pull our places by county
+  h <- read_html(url, timeout = 200)
+  reps <- h %>% #setting up the repeating structure
+     html_node("table") %>%
+     html_table()
+    if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next county
+    break}
+  reps$county <- county[i]
+  provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
+    }
+  }
+   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
+  return(provider.data)
+}
+provider.data<-NPIcode_taxonomy("02906", "Mental Health")
+provider.data
+```
 
-#I made this function that will take the length of the output of the taxonomy by county (I just called it NPIcode_taxonomy because it doesn't exist yet) and divides it by the population of the county pulled from census .csv data divided by 1000
+
+```{r}
+
+#I made this function that will take the length of the output of the taxonomy by county (I just called it county_collect_NPIcode_taxonomy because it doesn't exist yet) and divides it by the population of the county pulled from census .csv data divided by 1000
 
 providers_per_1000_county <- function(taxonomy, county, state) {
-numberprovidersper1000county <- length(NPIcode_taxonomy(taxonomy, county))
+numberprovidersper1000county <- length(county_collect_NPIcode_taxonomy(taxonomy, county))
 population <- c()
 for (i in length(census)) {
   if (census$STNAME == state) {
     if (census$CTYNAME == county) {
-      population <- census$CENSUS2010POP / 1000
+      population <- census$CENSUS2010POP / 1000 {
     }
   }
-}
+  }
 ratio <- numberprovidersper1000county / population
 return(ratio)
 }
@@ -201,6 +232,7 @@ return(ratio)
 #2) find a way to combine multiple states for a query (i.e. look at #providers/every 1000 people for a few different statess at once)
 #3) do this at county level
 
+```{r}
 
 plot<-ggplot(number_practices.low, aes(x=factor(n), y=nn))+
   geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
