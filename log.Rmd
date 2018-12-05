@@ -40,10 +40,10 @@ Kari: Maps with Meghan and overall assisting and debug help
 Meghan: provider density functions
 
 ##12/5/2018
-Meghan: providers by zip code
+Meghan: providers by zip code x
 Alex and MEghan: visualization functions
 Jackie: providers by county, provider density by county
-Kari: provider by strate
+Kari: provider by state
 
 ##provider by state
 get all zipcodes for state, then through NPI, two full joins, run function to get number of providers, perform operations to get from #providers/1000
