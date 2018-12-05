@@ -45,6 +45,7 @@ zips_used <- ZipsFromState(state)
       if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
         break}
       reps$zip <- zips_used[i]
+      reps$state_abbrev <- state
       provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
@@ -64,15 +65,14 @@ zips_used <- ZipsFromState(state)
   
   #getting input into same format as STNAME
   state_abbrev <- read.csv("state_abbrev.txt")
-  colnames(state_abbrev) <- c("STNAME","state")
-  state_abbrev$State_name = state_abbrev$STNAME
+  state_abbrev$STNAME <- state_abbrev$State
   NPI_to_census_abbrev <- left_join(NPI_to_census,state_abbrev,by="STNAME")
   
   #5. Return the summary measure
   rows<-NPI_to_census_abbrev %>%
+    filter(Abbreviation == state) %>%
     group_by(STNAME, CTYNAME, POPESTIMATE2010) %>%
     count() %>%
-    filter(STNAME == State_name)
     arrange(n)
   return(rows)
 
