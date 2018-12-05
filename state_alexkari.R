@@ -28,7 +28,7 @@ zips_from_state<-function(state_name){
 
 providers_in_state_by_county<-function(state,taxonomy){
 zips_used <- zips_from_state(state)
-  
+
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -57,22 +57,23 @@ zips_used <- zips_from_state(state)
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
-  
+
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
   census<-read.csv("co-est2017-alldata.csv")
-  
+
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-  
+
   #5. Return the summary measure
   rows<-NPI_to_census %>%
     group_by(CTYNAME, POPESTIMATE2010) %>%
     count() %>%
-    arrange(n) 
+    arrange(n)
   return(rows)
 
 }
 
 provider.data<-providers_in_state_by_county("RI", "Mental Health")
+
 
 
 
