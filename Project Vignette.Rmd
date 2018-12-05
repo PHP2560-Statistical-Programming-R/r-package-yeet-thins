@@ -13,5 +13,5 @@ ProvidR makes it easy to
 -explore provider density by state
 -explore numbers of providers by zip code 
 
-NumProviderInZip()
-NumProviderInCounty()
+NumProviderInZip() to show the number of providers in a single zip code for a certain taxonomy
+NumProviderInCounty() to show the number of providers in a single county for a certain taxonomy
