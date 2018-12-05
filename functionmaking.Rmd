@@ -29,7 +29,7 @@ library(ggplot2)
 library(stringi)
 library(roxygen2)
 library(testthat)
-devtools::install_github(("r-lib/devtools"))
+
 ```
 
 
