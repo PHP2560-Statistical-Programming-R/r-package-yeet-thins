@@ -57,6 +57,7 @@ zip.ri<-zip.ri
 
 ```{r}
 #looping over zip codes and pages when there are more than 100 providers per zip code
+#older function not neccesary
 
 NPIcode<-function(zipcode){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
@@ -86,6 +87,7 @@ provider.data <- NPIcode(zip.ri)
 ```
 
 ```{r}
+#old function, do not use 
 NPIcode_taxonomy<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
