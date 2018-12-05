@@ -2,7 +2,7 @@
 title: "Vignette"
 output: html_document
 ---
-
+vignette 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
