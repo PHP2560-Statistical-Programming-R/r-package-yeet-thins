@@ -8,10 +8,21 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+##Introduction to ProvidR
 ProvidR makes it easy to 
 -examine providers by type (taxonomy)
 -explore provider density by state
--explore numbers of providers by zip code 
+-explore numbers of providers by zip code
 
-NumProviderInZip() to show the number of providers in a single zip code for a certain taxonomy
-NumProviderInCounty() to show the number of providers in a single county for a certain taxonomy
+##Data in ProvidR
+In this package, we have included data from the National Provider Index and the National Census. 
+
+##Functions included in this package
+NumProviderInZip() shows the number of providers in a single zip code for a certain taxonomy
+NumProviderInCounty() shows the number of providers in a single county for a certain taxonomy
+
+<strong>NumProviderInZip</strong>
+This function allows you to determine the number of providers in a zipcode given a specific taxonomy (such as Mental Health, Primary Care...)
+```{r}
+NumProviderInZip("02906", "Mental Health")
+```
