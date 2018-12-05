@@ -2,6 +2,13 @@
 title: "ProvidersPerCounty"
 output: html_document
 ---
+---
+title: "ProvidersPerZipCode"
+output: html_document
+---
+
+#file for function that shows providers per zip code
+asdfdasfas 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -9,22 +16,49 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
-asdfsadf 
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(stringi)
+library(roxygen2)
+library(testthat)
+devtools::install_github(("r-lib/devtools"))
 ```
+  
 
-## Including Plots
+```{r}
+NumProviderInCounty<-function(county, state, taxonomy){
+  zicode<-
+  url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
+  provider.data <- data.frame() #initializing an empty data frame
+  skips <- seq(0,9999999,100) #create skips
+  for (i in 1:length(zipcode)) { #iterating over all RI zip codes
+    for (j in 1:length(skips)){ #also iterating over skils
+      zip <- zipcode[i]
+      skip <- skips[j]
+      tax <- str_replace_all(taxonomy," ","+")
+  url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
+  #text scrape to pull our places by zip code
+  h <- read_html(url, timeout = 200)
+  reps <- h %>% #setting up the repeating structure
+     html_node("table") %>%
+     html_table()
+    if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
+    break}
+  reps$zip <- zipcode[i]
+  provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
+    }
+  }
+   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
+  return(nrow(provider.data))
+}
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

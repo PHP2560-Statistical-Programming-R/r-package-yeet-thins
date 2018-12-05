@@ -1,4 +1,4 @@
-Num_provider_in_county<-function(zipcode,taxonomy){
+NumProviderInZip<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips

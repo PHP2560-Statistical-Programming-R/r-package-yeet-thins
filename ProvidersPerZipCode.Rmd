@@ -31,7 +31,7 @@ devtools::install_github(("r-lib/devtools"))
   
 
 ```{r}
-NPIcode_taxonomy<-function(zipcode,taxonomy){
+NumProviderInZip<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -56,4 +56,9 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   return(nrow(provider.data))
 }
 
+```
 
+```{r}
+(02906, "mental health")
+
+```
