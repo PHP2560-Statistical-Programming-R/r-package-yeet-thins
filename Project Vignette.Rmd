@@ -1,0 +1,17 @@
+---
+title: "Vignette"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+ProvidR makes it easy to 
+-examine providers by type (taxonomy)
+-explore provider density by state
+-explore numbers of providers by zip code 
+
+NumProviderInZip() to show the number of providers in a single zip code for a certain taxonomy
+NumProviderInCounty() to show the number of providers in a single county for a certain taxonomy
