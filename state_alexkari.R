@@ -65,7 +65,7 @@ zips_used <- zips_from_state(state)
   
   #5. Return the summary measure
   rows<-NPI_to_census %>%
-    group_by(CTYNAME) %>%
+    group_by(CTYNAME, POPESTIMATE2010) %>%
     count() %>%
     arrange(n) 
   return(rows)
@@ -74,7 +74,7 @@ zips_used <- zips_from_state(state)
 
 
 
-provider.data<-NPIcode_taxonomy("RI", "Mental Health")
+provider.data<-NPIcode_taxonomy("NY", "Mental Health")
 
 
 
