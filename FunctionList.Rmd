@@ -151,3 +151,9 @@ NumProviderInZip<-function(zipcode,taxonomy){
   return(nrow(NPI_to_census))
 }
 ```
+```{r}
+
+
+
+
+```
