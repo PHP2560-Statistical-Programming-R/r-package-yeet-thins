@@ -4,6 +4,8 @@ output: html_document
 ---
 vignette 
 
+changes to vignette 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
