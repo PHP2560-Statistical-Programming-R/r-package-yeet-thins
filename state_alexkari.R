@@ -15,7 +15,7 @@ library(testthat)
 
 
 #1. All zipcodes from the state
-zips_from_state<-function(state_name){
+ZipsFromState<-function(state_name){
   zip_holder<-zipcode%>%
     filter(state==state_name)%>%
     select(zip)
@@ -26,9 +26,10 @@ zips_from_state<-function(state_name){
 
 #2. Uses zipcodes to pull NPI providers
 
-providers_in_state_by_county<-function(state,taxonomy){
-zips_used <- zips_from_state(state)
-  
+ProvidersInStateByCounty<-function(state,taxonomy){
+  state="RI"
+  taxonomy="Mental Health"
+  zips_used <- ZipsFromState(state)
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -46,12 +47,13 @@ zips_used <- zips_from_state(state)
       if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
         break}
       reps$zip <- zips_used[i]
+      reps$state_abbrev <- state
       provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
-
+  
   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-
+  
   zip_link<-read.csv("zcta_county_rel_10.txt") %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
@@ -63,16 +65,21 @@ zips_used <- zips_from_state(state)
   
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   
+  #getting input into same format as STNAME
+  state_abbrev <- read.csv("state_abbrev.txt")
+  state_abbrev$STNAME <- state_abbrev$State
+  NPI_to_census_abbrev <- left_join(NPI_to_census,state_abbrev,by="STNAME")
+  
   #5. Return the summary measure
-  rows<-NPI_to_census %>%
-    group_by(CTYNAME, POPESTIMATE2010) %>%
+  rows<-NPI_to_census_abbrev %>%
+    filter(Abbreviation == state) %>%
+    group_by(STNAME, CTYNAME, POPESTIMATE2010) %>%
     count() %>%
-    arrange(n) 
+    arrange(n)
   return(rows)
-
+  
 }
 
-provider.data<-providers_in_state_by_county("RI", "Mental Health")
-
+provider.data<-ProvidersInStateByCounty("RI", "Mental Health")
 
 
