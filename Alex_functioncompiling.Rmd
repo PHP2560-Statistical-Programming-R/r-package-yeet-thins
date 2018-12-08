@@ -51,6 +51,7 @@ ZipsFromState<-function(state_name){
 }
 
 
+
 ```
 
 
@@ -66,8 +67,8 @@ testdata<-PracticesByZipInState("RI", "Mental Health")
 ```
 
 ```{r}
-BottomFiveZipsInState<-function(state, taxonomy){
-provider_data<-PracticesByZipInState(state, taxonomy)
+BottomFiveZipsInState<-function(st, type){
+provider_data<-PracticesByZipInState(st, type)
 
 bottomfive<-provider_data%>%
   arrange(n)
