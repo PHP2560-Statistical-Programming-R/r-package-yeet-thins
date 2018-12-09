@@ -22,7 +22,7 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
       tax <- str_replace_all(taxonomy," ","+")
   url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
   #text scrape to pull our places by zip code
-  h <- read_html(url, timeout = 200)
+  h <- read_html(url, timeout = 300)
   reps <- h %>% #setting up the repeating structure
      html_node("table") %>%
      html_table()
@@ -56,14 +56,12 @@ ZipsFromState<-function(state_name){
 
 
 ```{r}
-PracticesByZipInState<-function(state, taxonomy){
+GetDataFromState<-function(state, taxonomy){
   zipcode_holder<-ZipsFromState(state)
   data<-NPIcode_taxonomy(zipcode_holder, taxonomy)
-  counts<-countbyzip(data)
-  return(counts)
 }
 
-testdata<-PracticesByZipInState("RI", "Mental Health")
+testdata<-GetDataFromState("RI", "Mental Health")
 ```
 
 ```{r}
