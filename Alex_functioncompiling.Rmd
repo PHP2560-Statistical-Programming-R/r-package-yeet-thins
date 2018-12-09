@@ -105,9 +105,9 @@ LowProviderCountyByZip("RI", "Mental Health")
 
 ```{r}
 #I'm calling these functions toolbox functions
-toolbox_bottomfivezipsbypractice<-function(data){
-  
-  number_practices<-data%>%select(n) %>% #selecting and grouping by frequency
+LowProviderDensity<-function(data){
+    counts<-countbyzip(data)
+  number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
   group_by(n) %>%
   count() %>%
   arrange(n) #arranging by frequency
@@ -116,12 +116,12 @@ number_practices.low <- head(number_practices) #getting the first rows of the nu
   geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
 print(plot + ggtitle("Number of Zipcodes with low providers"))
 }
-toolbox_bottomfivezipsbypractice(testdata)
+LowProviderDensity(testdata)
 
 ```
 
 ```{r}
-toolbox_bottomfives<-function(data){
+BottomFiveZipcodes<-function(data){
   counts_holder<-data%>%
   group_by(zipcode) %>% 
 count() %>%
@@ -132,12 +132,7 @@ plot<-ggplot(counts, aes(x=zipcode, y=n))+
 return(plot)
 }
 
-holder<-testdata%>%
-  arrange(desc(n))
-gg<-head(holder)
-plot<-ggplot(gg, aes(x=zipcode, y=n))+
-  geom_bar(stat="identity")
-plot
+BottomFiveZipcodes(testdata)
 ```
 
 ```{r}
