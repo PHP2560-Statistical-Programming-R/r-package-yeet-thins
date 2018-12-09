@@ -124,6 +124,7 @@ zips_used <- ZipsFromState(state)
   state_abbrev <- read.csv("state_abbrev.txt")
   state_abbrev$STNAME <- state_abbrev$State
   NPI_to_census_abbrev <- left_join(NPI_to_census,state_abbrev,by="STNAME")
+  return(NPI_to_census_abbrev)
 }
 provider.data<-ProvidersInStateByCounty("RI", "Mental Health")
 
@@ -132,7 +133,7 @@ provider.data<-ProvidersInStateByCounty("RI", "Mental Health")
 
 
 ```{r}
-#I'm calling these functions toolbox functions
+#everything below here is a-okay
 LowProviderDensityZip<-function(data){
     counts<-countbyzip(data)
   number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
