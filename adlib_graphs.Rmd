@@ -1,0 +1,54 @@
+---
+title: "adlib_graphs"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+ 
+ 
+
+#graph templates to fill in after we complete the functions
+
+#List of graphs
+
+
+#counties within state by provider densities (top five) 
+#counties within state by provider densities (bottom five)
+#counties within a state by provider number (top five) 
+#counties within a state by provider number (bottom five)
+#counties within state by provider densities by taxonomy (top five) 
+#counties within state by provider densities by taxonomy (bottom five)
+#counties within a state by provider number by taxonomy (top five) 
+#counties within a state by provider number by taxonomy (bottom five) 
+
+
+```{r}
+providers by zip code 
+```{r}
+countbyzip <- provider.data %>% #creating a count of practices by zip code
+group_by(zipcode) %>% 
+count() %>%
+arrange(n) 
+
+#countbyzip
+#create a bar graph of providers by frequency
+plot<-ggplot(countbyzip, aes(x=zipcode, y=n))+
+  geom_bar(stat="identity")
+plot
+
+#number of counties with 1 provider, 2 providers, etc
+
+number_practices<-countbyzip %>%
+  select(n) %>% #selecting and grouping by frequency
+  group_by(n) %>%
+  count() %>%
+  arrange(n) #arranging by frequency
+number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
+
+#add axis names
+plot<-ggplot(number_practices.low, aes(x=factor(n), y=nn))+
+  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
+plot
+```
