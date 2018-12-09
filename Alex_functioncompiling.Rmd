@@ -67,9 +67,10 @@ testdata<-PracticesByZipInState("RI", "Mental Health")
 ```
 
 ```{r}
-BottomFiveZipsInState<-function(st, type){
-provider_data<-PracticesByZipInState(st, type)
-
+BottomFiveZipsInState<-function(state, taxonomy){
+  zipcode_holder<-ZipsFromState(state)
+  data<-NPIcode_taxonomy(zipcode_holder, taxonomy)
+  provider_data<-countbyzip(data)
 bottomfive<-provider_data%>%
   arrange(n)
 lowestfive<-head(bottomfive)
@@ -82,6 +83,9 @@ print(plot + ggtitle("Zipcodes with Lowest Coverage"))
 BottomFiveZipsInState("RI", "Mental Health")
 
 ```
+
+
+
 ```{r}
 #get visualization of the 5 zips with the lowest coverage of that taxonomy in the state
 LowProviderCountByZip<-function(state, taxonomy){
@@ -116,6 +120,26 @@ print(plot + ggtitle("Number of Zipcodes with low providers"))
 }
 toolbox_bottomfivezipsbypractice(testdata)
 
+```
+
+```{r}
+toolbox_bottomfives<-function(data){
+  counts_holder<-data%>%
+  group_by(zipcode) %>% 
+count() %>%
+arrange(n) 
+  counts<-head(counts_holder)
+plot<-ggplot(counts, aes(x=zipcode, y=n))+
+  geom_bar(stat="identity")
+return(plot)
+}
+
+holder<-testdata%>%
+  arrange(desc(n))
+gg<-head(holder)
+plot<-ggplot(gg, aes(x=zipcode, y=n))+
+  geom_bar(stat="identity")
+plot
 ```
 
 ```{r}
