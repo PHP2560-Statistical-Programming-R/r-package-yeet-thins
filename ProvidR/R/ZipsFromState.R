@@ -1,4 +1,8 @@
-#Gives you all zipcodes in a given state
+#`ZipsFromState
+#'
+#'This function, given a state, provides you with all of the zip codes in that state.
+#'@param state_name.
+
 ZipsFromState<-function(state_name){
   zip_holder<-zipcode%>%
     filter(state==state_name)%>%
