@@ -12,7 +12,10 @@ library(ggplot2)
 library(stringi)
 library(roxygen2)
 library(testthat)
+library(devtools)
 ##Base function to be used for everything else
+setwd("parent_directory")
+create("ProvidR")
 
 NPIcode_taxonomy<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
