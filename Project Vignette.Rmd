@@ -22,7 +22,7 @@ GetDataFromState() outs together a data frame with providers from the NPI data b
 NumProviderInZip() shows the number of providers in a single zip code for a certain taxonomy
 NumProviderInCounty() shows the number of providers in a single county for a certain taxonomy
 BottomFiveZipsInState() returns the five zip codes with fewest providers in a given state
-LowProviderCountByZip() this returns the number of zip codes with low prevalence of providers
+
 
 
 ##Function examples
@@ -43,9 +43,5 @@ NumProviderInZip("02906", "Mental Health")
 This function graphs the zip codes with the fewest providers of a given taxonomy. For this, input both state abbreviation and health provider taxonomy in quotation marks, separated by a comma. 
 ```{r}
 BottomFiveZipsInState("RI", "Mental Health")
-
-```
-<strong>LowProviderCountbyZip</strong>
-```{r}
 
 ```
