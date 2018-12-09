@@ -18,8 +18,15 @@ ProvidR makes it easy to
 In this package, we have included data from the National Provider Index and the National Census. 
 
 ##Functions included in this package
+GetDataFromState
 NumProviderInZip() shows the number of providers in a single zip code for a certain taxonomy
 NumProviderInCounty() shows the number of providers in a single county for a certain taxonomy
+
+<strong>GetDataFromState</strong>
+If you give a state and a provider taxonomy, it will input these into the NPI data base and return a data frame with providers within that taxinomical category, in the given state. State should be input as the state abbreviation within quotation marks. Provider taxonomy should also be input in quotation marks. 
+```{r}
+GetDataFromState("RI", "Mental Health")
+```
 
 <strong>NumProviderInZip</strong>
 This function allows you to determine the number of providers in a zipcode given a specific taxonomy (such as Mental Health, Primary Care...)
