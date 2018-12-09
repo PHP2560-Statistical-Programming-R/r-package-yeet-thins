@@ -11,6 +11,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #graph templates to fill in after we complete the functions
 
+#List of graphs
+
+
+#counties within state by provider densities (top five) 
+#counties within state by provider densities (bottom five)
+#counties within a state by provider number (top five) 
+#counties within a state by provider number (bottom five)
+#counties within state by provider densities by taxonomy (top five) 
+#counties within state by provider densities by taxonomy (bottom five)
+#counties within a state by provider number by taxonomy (top five) 
+#counties within a state by provider number by taxonomy (bottom five) 
+
 
 ```{r}
 providers by zip code 
