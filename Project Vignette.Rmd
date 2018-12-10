@@ -4,6 +4,9 @@ output: html_document
 ---
 vignette 
 
+changes to vignette
+why won't this work
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -18,30 +21,11 @@ ProvidR makes it easy to
 In this package, we have included data from the National Provider Index and the National Census. 
 
 ##Functions included in this package
-GetDataFromState() outs together a data frame with providers from the NPI data base using a given state and provider taxonomy
 NumProviderInZip() shows the number of providers in a single zip code for a certain taxonomy
 NumProviderInCounty() shows the number of providers in a single county for a certain taxonomy
-BottomFiveZipsInState() returns the five zip codes with fewest providers in a given state
-
-
-
-##Function examples
-
-<strong>GetDataFromState</strong>
-If you give a state and a provider taxonomy, it will input these into the NPI data base and return a data frame with providers within that taxinomical category, in the given state. State should be input as the state abbreviation within quotation marks. Provider taxonomy should also be input in quotation marks. 
-```{r}
-GetDataFromState("RI", "Mental Health")
-```
 
 <strong>NumProviderInZip</strong>
 This function allows you to determine the number of providers in a zipcode given a specific taxonomy (such as Mental Health, Primary Care...)
 ```{r}
 NumProviderInZip("02906", "Mental Health")
-```
-
-<strong>BottomFiveZipsInState</strong>
-This function graphs the zip codes with the fewest providers of a given taxonomy. For this, input both state abbreviation and health provider taxonomy in quotation marks, separated by a comma. 
-```{r}
-BottomFiveZipsInState("RI", "Mental Health")
-
 ```
