@@ -7,11 +7,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
  
- 
-
-#graph templates to fill in after we complete the functions
-
-#List of graphs
 
 
 #counties within state by provider densities (top five) 
@@ -25,21 +20,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r}
-providers by zip code 
+#counties within state by provider densities (top five) 
 ```{r}
-countbyzip <- provider.data %>% #creating a count of practices by zip code
-group_by(zipcode) %>% 
+
+#these will need to be filled in once we have the actual fuunctions done
+PROVIDERDENSBYCTY <- listofproviderdensities
+group_by(CTY) %>%
 count() %>%
-arrange(n) 
+arrange(n)
 
-#countbyzip
-#create a bar graph of providers by frequency
-plot<-ggplot(countbyzip, aes(x=zipcode, y=n))+
-  geom_bar(stat="identity")
+plot<-ggplot(number_practices.low, aes(x=factor(n), y=nn))+
+  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
 plot
+```
 
-#number of counties with 1 provider, 2 providers, etc
+#counties within state by provider densities (bottom five)
 
+```{r}
 number_practices<-countbyzip %>%
   select(n) %>% #selecting and grouping by frequency
   group_by(n) %>%
