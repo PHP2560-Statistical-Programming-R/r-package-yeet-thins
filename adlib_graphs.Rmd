@@ -19,33 +19,77 @@ knitr::opts_chunk$set(echo = TRUE)
 #counties within a state by provider number by taxonomy (bottom five) 
 
 
-```{r}
+
 #counties within state by provider densities (top five) 
 ```{r}
 
-#these will need to be filled in once we have the actual fuunctions done
-PROVIDERDENSBYCTY <- listofproviderdensities
+#these will need to be filled in once we have the actual functions done
+countyproviderdensityhigh <- function(state) {
+providersbycountydens <- listofproviderdensities %>%
+filter(STATE = state) %>%
 group_by(CTY) %>%
 count() %>%
 arrange(n)
+providersbycounty.high <- head(providersbycounty, 5)
 
-plot<-ggplot(number_practices.low, aes(x=factor(n), y=nn))+
-  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
+plot<-ggplot(providersbycounty.high, aes(x=factor(n), y=nn))+
+  geom_bar(stat="identity") + labs(x = "County", y = "Provider density")
 plot
+
+}
 ```
 
-#counties within state by provider densities (bottom five)
+#counties within state by provider density (bottom five)
 
 ```{r}
-number_practices<-countbyzip %>%
-  select(n) %>% #selecting and grouping by frequency
-  group_by(n) %>%
-  count() %>%
-  arrange(n) #arranging by frequency
-number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
+countyproviderdensityhigh <- function(state) {
+providersbycountylow <- listofproviderdensities %>%
+filter(STATE = state) %>%
+group_by(CTY) %>%
+count() %>%
+arrange(desc = TRUE)
+providersbycounty.low <- head(providersbycountylow, 5)
 
-#add axis names
-plot<-ggplot(number_practices.low, aes(x=factor(n), y=nn))+
-  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
+plot<-ggplot(providersbycounty.low, aes(x=factor(n), y=nn))+
+  geom_bar(stat="identity") + labs(x = "County", y = "Provider density")
 plot
+
+}
+```
+
+#counties within a state by provider number (top five) 
+
+```{r}
+countyprovidernumberhigh <- function(state) {
+providersbycountynumhigh <- listofprovidernumbers %>%
+filter(STATE = state) %>%
+group_by(CTY) %>%
+count() %>%
+arrange(desc = TRUE)
+providersbycountynum.high <- head(providersbycountynumhigh, 5)
+
+plot<-ggplot(providersbycountynum.high, aes(x=factor(n), y=nn))+
+  geom_bar(stat="identity") + labs(x = "County", y = "Number of providers")
+plot
+
+}
+```
+
+
+#counties within a state by provider number (bottom five) 
+
+```{r}
+countyprovidernumberlow <- function(state) {
+providersbycountynumlow <- listofprovidernumbers %>%
+filter(STATE = state) %>%
+group_by(CTY) %>%
+count() %>%
+arrange()
+providersbycountynum.low <- head(providersbycountynumlow, 5)
+
+plot<-ggplot(providersbycountynum.low, aes(x=factor(n), y=nn))+
+  geom_bar(stat="identity") + labs(x = "County", y = "Number of providers")
+plot
+
+}
 ```
