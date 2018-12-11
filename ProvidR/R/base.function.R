@@ -1,7 +1,15 @@
+<<<<<<< HEAD
+=======
+##libraries needed
+>>>>>>> 6a4ec32c20f512e21ed8c24ee04f6c2222485db7
 source("Libraries.R")
 check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
                  "ggplot2", "stringi", "roxygen2", "testthat"))
 
+<<<<<<< HEAD
+=======
+##Base function to be used for everything else
+>>>>>>> 6a4ec32c20f512e21ed8c24ee04f6c2222485db7
 
 NPIcode_taxonomy<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from

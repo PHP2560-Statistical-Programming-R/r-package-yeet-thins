@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 source("Libraries.R")
 check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
                  "ggplot2", "stringi", "roxygen2", "testthat"))
 
+=======
+#groups by diferent units
+source("Libraries.R")
+check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
+                 "ggplot2", "stringi", "roxygen2", "testthat"))
+>>>>>>> 6a4ec32c20f512e21ed8c24ee04f6c2222485db7
 GroupByUnit<-function(data, unit){
   if(unit=="zipcode"){
     countbyzip<-data%>%
@@ -15,6 +22,10 @@ GroupByUnit<-function(data, unit){
       group_by(county) %>%
       count() %>%
       arrange(n)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6a4ec32c20f512e21ed8c24ee04f6c2222485db7
     return(countbycounty)
   } else if (unit=="state"){
     countbystate<-data%>%
@@ -28,7 +39,11 @@ GroupByUnit<-function(data, unit){
       group_by(city) %>%
       count() %>%
       arrange(n)
+<<<<<<< HEAD
 HEAD
+=======
+
+>>>>>>> 6a4ec32c20f512e21ed8c24ee04f6c2222485db7
     return(countbycity)
   } else if (unit=="type"){
     countbyprovider<-data%>%
@@ -36,14 +51,16 @@ HEAD
       count() %>%
       arrange(desc(n))
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     return(countbyprovider)
   }
 }
 
 =======
+=======
+>>>>>>> 6a4ec32c20f512e21ed8c24ee04f6c2222485db7
 
     return(countbyprovider)
   }
 }
->>>>>>> 8cbebc6441b8da355e39f4f449cddee018b55a05
