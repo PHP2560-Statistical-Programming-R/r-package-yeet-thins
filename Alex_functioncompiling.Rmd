@@ -111,7 +111,7 @@ zips_used <- ZipsFromState(state)
   NPI_to_census_abbrev <- left_join(NPI_to_census,state_abbrev,by="STNAME")
   return(NPI_to_census_abbrev)
 }
-provider.data<-ProvidersInStateByCounty("RI", "Mental Health")
+provider_data<-ProvidersInStateByCounty("RI", "Mental Health")
 
 ```
 
