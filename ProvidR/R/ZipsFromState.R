@@ -1,3 +1,8 @@
+#' ZipsFromState
+#' Pulls out all the zipcodes from a state
+#' @param "State"
+#' @return Zipcodes from the given state'
+
 source("Libraries.R")
 check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
                  "ggplot2", "stringi", "roxygen2", "testthat"))
