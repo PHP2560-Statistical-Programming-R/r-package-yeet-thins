@@ -12,6 +12,8 @@ library(stringi)
 library(roxygen2)
 library(testthat)
 
+githuburl1<-"https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/zcta_county_rel_10.Rda"
+githuburl2<-"https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/co_est2017.Rda"
 
 NPIcode_taxonomy<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
@@ -41,14 +43,14 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
   provider.data<-mutate(provider.data, zipcode= as.character(zipcode))
 
-  zip_link<-load("https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/zcta_county_rel_10.rda") %>%
+  zip_link<-getURL(githuburl1) %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
 
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
-  census<-load("https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/co_est2017.Rda")
+  census<-load(url(githuburl2))
 
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   return(NPI_to_census)
