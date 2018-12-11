@@ -8,6 +8,16 @@
 #
 
 library(shiny)
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -18,17 +28,18 @@ ui <- fluidPage(
    # Sidebar with a slider input for number of bins d
    sidebarLayout(
       sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ), textInput("text", label = h3("Text input"), value = "Enter text..."),
+         textInput("state", label = h3("Text input"), value = "State abbreviation"),
       
       hr(),
       fluidRow(column(3, verbatimTextOutput("value")))
       
-   ), 
+   ,  textInput("Taxonomy", label = h3("Text input"), value = "Taxonomy"),
+   
+   hr(),
+   fluidRow(column(3, verbatimTextOutput("value")))
+   
+      ), 
+   
       
       # Show a plot of the generated distribution
       mainPanel(
