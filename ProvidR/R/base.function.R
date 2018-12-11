@@ -41,14 +41,14 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
   provider.data<-mutate(provider.data, zipcode= as.character(zipcode))
 
-  zip_link<-read.csv("https://www2.census.gov/geo/docs/maps-data/data/rel/zcta_county_rel_10.txt") %>%
+  zip_link<-load("https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/zcta_county_rel_10.rda") %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
 
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
-  census<-read.csv("https://www2.census.gov/programs-surveys/popest/datasets/2010-2017/counties/totals/co-est2017-alldata.csv")
+  census<-load("https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/co_est2017.Rda")
 
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   return(NPI_to_census)
