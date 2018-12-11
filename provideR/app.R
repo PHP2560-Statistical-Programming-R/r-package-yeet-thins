@@ -15,7 +15,7 @@ ui <- fluidPage(
    # Application title
    titlePanel("Identify Providers in your County or State"),
    
-   # Sidebar with a slider input for number of bins 
+   # Sidebar with a slider input for number of bins d
    sidebarLayout(
       sidebarPanel(
          sliderInput("bins",
