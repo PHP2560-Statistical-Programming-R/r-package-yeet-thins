@@ -11,6 +11,8 @@ library(ggplot2)
 library(stringi)
 library(roxygen2)
 library(testthat)
+install.packages("repmis")
+library(repmis)
 
 githuburl1<-"https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/zcta_county_rel_10.Rda"
 githuburl2<-"https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/co_est2017.Rda"
@@ -43,14 +45,14 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
   provider.data<-mutate(provider.data, zipcode= as.character(zipcode))
 
-  zip_link<-getURL(githuburl1) %>%
+  zip_link<-source_data("https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/zcta_county_rel_10.Rda") %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
 
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
-  census<-load(url(githuburl2))
+  census<-source_data("https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/co_est2017.Rda")
 
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   return(NPI_to_census)
