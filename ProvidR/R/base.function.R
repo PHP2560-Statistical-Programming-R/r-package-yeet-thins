@@ -53,3 +53,4 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   return(NPI_to_census)
 }
+NPIcode_taxonomy("02906", "Mental Health")

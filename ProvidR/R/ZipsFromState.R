@@ -3,10 +3,6 @@
 #' @param "State"
 #' @return Zipcodes from the given state'
 
-source("CheckPackages.R")
-check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
-                 "ggplot2", "stringi", "roxygen2", "testthat"))
-
 
 
 ZipsFromState<-function(state_name){
