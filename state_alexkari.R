@@ -29,7 +29,7 @@ ZipsFromState<-function(state_name){
 ProvidersInStateByCounty<-function(state,taxonomy){
   state="RI"
   taxonomy="Mental Health"
-zips_used <- ZipsFromState(state)
+  zips_used <- ZipsFromState(state)
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -51,25 +51,25 @@ zips_used <- ZipsFromState(state)
       provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
-
+  
   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-
+  
   zip_link<-read.csv("zcta_county_rel_10.txt") %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
-
+  
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
   census<-read.csv("co-est2017-alldata.csv")
-
+  
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-
+  
   #getting input into same format as STNAME
   state_abbrev <- read.csv("state_abbrev.txt")
   state_abbrev$STNAME <- state_abbrev$State
   NPI_to_census_abbrev <- left_join(NPI_to_census,state_abbrev,by="STNAME")
-
+  
   #5. Return the summary measure
   rows<-NPI_to_census_abbrev %>%
     filter(Abbreviation == state) %>%
@@ -77,11 +77,9 @@ zips_used <- ZipsFromState(state)
     count() %>%
     arrange(n)
   return(rows)
-
+  
 }
 
 provider.data<-ProvidersInStateByCounty("RI", "Mental Health")
-
-
 
 

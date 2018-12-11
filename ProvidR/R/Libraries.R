@@ -1,0 +1,15 @@
+#' Libraries needed to run the package
+#'
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(stringi)
+library(roxygen2)
+library(testthat)
