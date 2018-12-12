@@ -15,10 +15,6 @@ library(roxygen2)
 library(testthat)
 library(repmis)
 
-source("Libraries.R")
-check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
-                 "ggplot2", "stringi", "roxygen2", "testthat"))
-
 ProviderInStateByCounty<-function(state,taxonomy){
   zips_used <- zips_from_state(state)
 

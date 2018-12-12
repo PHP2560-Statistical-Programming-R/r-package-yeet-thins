@@ -15,9 +15,6 @@ library(roxygen2)
 library(testthat)
 library(repmis)
 
-source("Libraries.R")
-check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
-                 "ggplot2", "stringi", "roxygen2", "testthat"))
 
 NumProviderInZip<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
