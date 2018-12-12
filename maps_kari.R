@@ -1,3 +1,4 @@
+#this still needs to be functionified but it works
 #checking if packages are installed; installing them if not
 maps<-function(state,taxonomy){
   #install/load required packages
@@ -21,21 +22,19 @@ maps<-function(state,taxonomy){
   unique(us$NAME_1)
   
   ri<-subset(us,NAME_1=="Rhode Island")
-  #plot(ri)
-  #head(ri)
-  test2$NAME_2 <- sub(pattern=" County", replacement="", test2$CTYNAME)
-  #left_join(ri,test2,by=NAME_2) #doesn't work for spacial data
 
-  head(ri)
-  
-  plot(ri)
-  points(test2$provider_density,col="red",pch=16)
-  
-  
+  #test2 is county-level summary data from ProviderInStateByCounty
+  #get rid of "County" as that is not in the geospacial data
+  test2$NAME_2 <- sub(pattern=" County", replacement="", test2$CTYNAME) 
   ri2 <- merge(ri, test2, by.x='NAME_2', by.y='NAME_2')
-  names(ri2)
-  head(ri2)
-  
+
+  #making colors
+  p <- colorRampPalette(c("white", "red"))(128)
+  palette(p)
+  prov <- ri2$provider_density
+  cols <- (prov - min(prov))/diff(range(prov))*127+1
+  #the final product
+  plot(ri2, col=cols)
 }
 
 
