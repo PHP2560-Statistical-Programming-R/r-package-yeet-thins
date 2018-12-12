@@ -17,6 +17,8 @@ library(repmis)
 
 
 NumProviderInZip<-function(zipcode,taxonomy){
+  load("ProvidR/Data/zcta_county_rel_10.Rda")
+  load("ProvidR/Data/co_est2017.Rda")
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips

@@ -15,9 +15,6 @@ library(roxygen2)
 library(testthat)
 library(repmis)
 
-githuburl1<-"https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/zcta_county_rel_10.Rda"
-githuburl2<-"https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/co_est2017.Rda"
-
 NPIcode_taxonomy<-function(zipcode,taxonomy){
 load("ProvidR/Data/zcta_county_rel_10.Rda")
 load("ProvidR/Data/co_est2017.Rda")
