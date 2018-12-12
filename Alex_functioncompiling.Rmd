@@ -5,6 +5,19 @@ date: "December 8, 2018"
 output: html_document
 ---
 
+```{r}
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -22,7 +35,7 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
       tax <- str_replace_all(taxonomy," ","+")
   url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
   #text scrape to pull our places by zip code
-  h <- read_html(url, timeout = 300)
+  h <- read_html(url, timeout = 10000)
   reps <- h %>% #setting up the repeating structure
      html_node("table") %>%
      html_table()
@@ -57,7 +70,7 @@ ZipsFromState<-function(state_name){
 
 
 ```{r}
-GetDataFromState<-function(state, taxonomy){
+GetDataFromState<-function(state, taxonomy) {
   zipcode_holder<-ZipsFromState(state)
   data<-NPIcode_taxonomy(zipcode_holder, taxonomy)
 }
@@ -124,7 +137,7 @@ provider_data<-ProvidersInStateByCounty("RI", "Mental Health")
 
 ```{r}
 #everything below here is a-okay
-LowProviderDensityZip<-function(data){
+LowProviderNumberZip<-function(data){
     counts<-countbyzip(data)
   number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
   group_by(n) %>%
@@ -132,10 +145,11 @@ LowProviderDensityZip<-function(data){
   arrange(n) #arranging by frequency
 number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
   plot<-ggplot(number_practices.low, aes(x=n, y=nn))+
-  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
-print(plot + ggtitle("Number of Zipcodes with low providers"))
+  geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes") +
+  scale_color_gradientn(colours = rainbow)
+print(plot + ggtitle("Zip codes with low numbers of providers"))
 }
-LowProviderDensity(testdata)
+LowProviderNumberZip(testdata)
 
 ```
 
