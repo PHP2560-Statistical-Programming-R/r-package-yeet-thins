@@ -1,10 +1,23 @@
-source("Libraries.R")
-check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
-                 "ggplot2", "stringi", "roxygen2", "testthat"))
+#' ProviderInStateByCounty
+
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(stringi)
+library(roxygen2)
+library(testthat)
+library(repmis)
 
 ProviderInStateByCounty<-function(state,taxonomy){
   zips_used <- zips_from_state(state)
-  
+
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -25,27 +38,27 @@ ProviderInStateByCounty<-function(state,taxonomy){
       provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
-  
+
   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-  
+
   zip_link<-read.csv("zcta_county_rel_10.txt") %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
-  
+
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
   census<-read.csv("co-est2017-alldata.csv")
-  
+
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-  
+
   #5. Return the summary measure
   rows<-NPI_to_census %>%
     group_by(CTYNAME, POPESTIMATE2010) %>%
     count() %>%
     arrange(n)
   return(rows)
-  
+
 }
 
 

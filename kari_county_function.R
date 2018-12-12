@@ -1,24 +1,60 @@
-#' Group by unit
-#' This groups different units together
-library(rvest)
-library(httr)
-library(dplyr)
-library(jsonlite)
-library(XML)
-library(stringr)
-library(zipcode)
-library(dplyr)
-library(stringr)
-library(ggplot2)
-library(stringi)
-library(roxygen2)
-library(testthat)
-library(repmis)
+#checking if packages are installed; installing them if not
+if(!require(rvest)){
+  install.packages("rvest")
+  library(rvest)
+}
 
+if(!require(httr)){
+  install.packages("httr")
+  library(httr)
+}
 
+if(!require(dplyr)){
+  install.packages("dplyr")
+  library(dplyr)
+}
 
-#1. All zipcodes from the state
-zips_from_state<-function(state_name){
+if(!require(jsonlite)){
+  install.packages("jsonlite")
+  library(jsonlite)
+}
+
+if(!require(XML)){
+  install.packages("XML")
+  library(XML)
+}
+
+if(!require(stringr)){
+  install.packages("stringr")
+  library(stringr)
+}
+
+if(!require(zipcode)){
+  install.packages("zipcode")
+  library(zipcode)
+}
+
+if(!require(ggplot2)){
+  install.packages("ggplot2")
+  library(ggplot2)
+}
+
+if(!require(stringi)){
+  install.packages("stringi")
+  library(stringi)
+}
+
+if(!require(roxygen2)){
+  install.packages("roxygen2")
+  library(roxygen2)
+}
+
+if(!require(testthat)){
+  install.packages("testthat")
+  library(testthat)
+}
+
+ZipsFromState<-function(state_name){
   zip_holder<-zipcode%>%
     filter(state==state_name)%>%
     select(zip)
@@ -27,11 +63,9 @@ zips_from_state<-function(state_name){
 }
 
 
-#2. Uses zipcodes to pull NPI providers
-
-providers_in_state_by_county<-function(state,taxonomy){
-  zips_used <- zips_from_state(state)
-
+ProviderInStateByCounty<-function(state,taxonomy){
+  zips_used <- ZipsFromState(state)
+  
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -49,32 +83,35 @@ providers_in_state_by_county<-function(state,taxonomy){
       if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
         break}
       reps$zip <- zips_used[i]
+      reps$state_name <- state
       provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
-
+  
   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-
+  
   zip_link<-read.csv("zcta_county_rel_10.txt") %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
-
+  
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
   census<-read.csv("co-est2017-alldata.csv")
-
+  
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-
+  
+  head(NPI_to_census)
+  
   #5. Return the summary measure
-  rows<-NPI_to_census %>%
-    group_by(CTYNAME) %>%
-    count() %>%
-    arrange(n)
-  return(rows)
-
+#  rows<-NPI_to_census %>%
+#    group_by(CTYNAME, POPESTIMATE2010) %>%
+#    count() %>%
+#    arrange(n)
+#  return(rows)
 }
 
 
+ProviderInStateByCounty("RI","mental health")
 
 
