@@ -16,9 +16,6 @@ library(testthat)
 library(repmis)
 
 
-source("Libraries.R")
-check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
-                 "ggplot2", "stringi", "roxygen2", "testthat"))
 
 #1. All zipcodes from the state
 zips_from_state<-function(state_name){
@@ -78,9 +75,6 @@ providers_in_state_by_county<-function(state,taxonomy){
 
 }
 
-
-
-provider.data<-NPIcode_taxonomy("RI", "Mental Health")
 
 
 
