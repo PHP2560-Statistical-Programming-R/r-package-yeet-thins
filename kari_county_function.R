@@ -110,15 +110,14 @@ ProviderInStateByCounty<-function(state,taxonomy){
   
   NPI_states <- left_join(NPI_to_census, state_abbrev, by=c("state.name.long"))
   
-  head(NPI_states)
-  
   #5. Return the summary measure
- # rows<-NPI_to_census %>%
-#    group_by(CTYNAME, POPESTIMATE2010, Abbreviation, state.name.long) %>%
- #   count() %>%
-#    filter(Abbreviation==state.name)
-#    arrange(n)
-#  return(rows)
+  rows<-NPI_states %>%
+    group_by(CTYNAME, POPESTIMATE2010, Abbreviation, state.name) %>%
+    count() %>%
+    filter(Abbreviation==state.name) %>%
+    select(CTYNAME, POPESTIMATE2010, state.name, n) %>%
+    arrange(n)
+  return(rows)
 }
 
 
