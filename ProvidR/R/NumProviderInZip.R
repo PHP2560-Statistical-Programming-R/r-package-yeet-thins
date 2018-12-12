@@ -17,6 +17,10 @@ library(repmis)
 
 
 NumProviderInZip<-function(zipcode,taxonomy){
+  load("ProvidR/Data/zcta_county_rel_10.Rda")
+  load("ProvidR/Data/co_est2017.Rda")
+  zip_link = zcta_county_rel_10
+  census = co_est2017_alldata
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -44,16 +48,17 @@ NumProviderInZip<-function(zipcode,taxonomy){
   provider.data$statename<- noquote( str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
   provider.data<-mutate(provider.data, zipcode= as.character(zipcode))
 
-  zip_link<-read.csv("zcta_county_rel_10.txt") %>%
+  zip_link<- zip_link %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
-
+  
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
-  census<-read.csv("co-est2017-alldata.csv")
-
+  
+  NPI_join$STATE<-as.character(NPI_join$STATE)
+  
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-  return(nrow(NPI_to_census))
+  return(NPI_to_census)
 }
 
