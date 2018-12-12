@@ -1,24 +1,68 @@
-#' ProviderInStateByCounty
+#checking if packages are installed; installing them if not
+if(!require(rvest)){
+  install.packages("rvest")
+  library(rvest)
+}
 
-library(rvest)
-library(httr)
-library(dplyr)
-library(jsonlite)
-library(XML)
-library(stringr)
-library(zipcode)
-library(dplyr)
-library(stringr)
-library(ggplot2)
-library(stringi)
-library(roxygen2)
-library(testthat)
-library(repmis)
+if(!require(httr)){
+  install.packages("httr")
+  library(httr)
+}
+
+if(!require(dplyr)){
+  install.packages("dplyr")
+  library(dplyr)
+}
+
+if(!require(jsonlite)){
+  install.packages("jsonlite")
+  library(jsonlite)
+}
+
+if(!require(XML)){
+  install.packages("XML")
+  library(XML)
+}
+
+if(!require(stringr)){
+  install.packages("stringr")
+  library(stringr)
+}
+
+if(!require(zipcode)){
+  install.packages("zipcode")
+  library(zipcode)
+}
+
+if(!require(ggplot2)){
+  install.packages("ggplot2")
+  library(ggplot2)
+}
+
+if(!require(stringi)){
+  install.packages("stringi")
+  library(stringi)
+}
+
+if(!require(roxygen2)){
+  install.packages("roxygen2")
+  library(roxygen2)
+}
+
+if(!require(testthat)){
+  install.packages("testthat")
+  library(testthat)
+}
+
+
 
 ProviderInStateByCounty<-function(state,taxonomy){
-  zips_used <- zips_from_state(state)
-
-  url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
+  zips_used <- ZipsFromState(state)
+  load("ProvidR/Data/zcta_county_rel_10.Rda")
+  load("ProvidR/Data/co_est2017.Rda")
+  zip_link = zcta_county_rel_10
+  census = co_est2017_alldata
+   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
   for (i in 1:length(zips_used)) { #iterating over all RI zip codes
@@ -38,27 +82,33 @@ ProviderInStateByCounty<-function(state,taxonomy){
       provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
-
+  
   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-
-  zip_link<-read.csv("zcta_county_rel_10.txt") %>%
+  
+  provider.data$state.name <- noquote(str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
+  
+  provider.data <- filter(provider.data,state.name==state)
+  
+  zip_link<- zip_link %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
-
+  
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
-  census<-read.csv("co-est2017-alldata.csv")
-
+  
+  NPI_join$STATE<-as.character(NPI_join$STATE)
+  
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-
-  #5. Return the summary measure
-  rows<-NPI_to_census %>%
-    group_by(CTYNAME, POPESTIMATE2010) %>%
-    count() %>%
-    arrange(n)
-  return(rows)
-
+  NPI_to_census$state.name.long <- NPI_to_census$STNAME
+  
+  state_abbrev <- read.csv("state_abbrev.txt") #change this data source in package
+  state_abbrev$state.name.long <- state_abbrev$State
+  
+  NPI_states <- left_join(NPI_to_census, state_abbrev, by=c("state.name.long"))
+  
+  return(NPI_states)
+  
 }
 
 

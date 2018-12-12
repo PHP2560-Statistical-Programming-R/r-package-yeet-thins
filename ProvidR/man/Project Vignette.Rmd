@@ -29,6 +29,8 @@ BottomFiveZipcodes() allows you to create a bar graph visualization of the five 
 TopFiveZipcodes() allows you to create a bar graph visualization of the five zip codes with the highest number of providers (with at least one provider) in a state.
 TopTaxonomiesZip() allows you to output a bar graph of the taxonomy types with the highest numbers of providers in them by zip code. 
 BottomTaxonomiesZip() allows you to output a bar graph of the taxonomy types with the lowest numbers of providers in them by zip code. 
+ProvidersInStateByCounty() returns a data frame with all of the providers in a state given a taxonomy and breaks them down by county.
+SummaryByCounty() this takes the data frame creates with ProvidersInStateByCounty and returns the number of providers in a county, the population of the county, and the number of doctors per 1,000 people. 
 
 ##Function examples
 
@@ -81,5 +83,18 @@ TopTaxonomiesZip(data)
 This function allows you to output a visualization of the taxonomy types with the highest numbers of providers in them by zip code. 
 ```{r}
 BottomTaxonomiesZip(data)
+```
+
+<strong>ProvidersInStateByCounty</strong>
+This function retrns a data frame that includes the providers in a state, given a provider taxonomy, by county.
+```{r}
+ProviderInStateByCounty("RI", "Primary Care")
+```
+
+<strong>SummaryByCounty</strong>
+Given the data frame created by ProvidersinStateByCounty, this returns the number of providers in a county, the population of the county and the number of providers per 1,000 county residents. 
+```{r}
+df<-ProviderInStateByCounty("RI", "Primary Care")
+SummaryByCounty(df)
 ```
 
