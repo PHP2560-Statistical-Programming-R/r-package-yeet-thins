@@ -1,3 +1,20 @@
+#' Group by unit
+#' This groups different units together
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(stringi)
+library(roxygen2)
+library(testthat)
+library(repmis)
+
 
 source("Libraries.R")
 check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",

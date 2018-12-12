@@ -1,7 +1,19 @@
 #' ZipsFromState
 #' Pulls out all the zipcodes from a state
-#' @param "State"
-#' @return Zipcodes from the given state'
+library(rvest)
+library(httr)
+library(dplyr)
+library(jsonlite)
+library(XML)
+library(stringr)
+library(zipcode)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(stringi)
+library(roxygen2)
+library(testthat)
+library(repmis)
 
 
 
@@ -13,4 +25,3 @@ ZipsFromState<-function(state_name){
   return(zip_state)
 }
 
-document()
