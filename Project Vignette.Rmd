@@ -4,28 +4,82 @@ output: html_document
 ---
 vignette 
 
-changes to vignette
-why won't this work
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ##Introduction to ProvidR
-ProvidR makes it easy to 
--examine providers by type (taxonomy)
--explore provider density by state
--explore numbers of providers by zip code
+ProvidR is a package that allows you to scrape current NPI data and create streamlined visualizations exploring numbers of providers in the state. This tool can be used to understand both areas with high numbers ofare available and to identify gaps in health care access. 
+
+Some examples of ProvidR uses include: 
+-examining providers by taxonomy (i.e. "mental health," "cardiology," "pediatrics")
+-exploring provider density by state
+-exploring numbers of providers by zip code
+-create data visualizations for understanding provider numbers and densities 
 
 ##Data in ProvidR
 In this package, we have included data from the National Provider Index and the National Census. 
 
 ##Functions included in this package
+GetDataFromState() creates a data frame with providers from the NPI data base using a given state and provider taxonomy
 NumProviderInZip() shows the number of providers in a single zip code for a certain taxonomy
-NumProviderInCounty() shows the number of providers in a single county for a certain taxonomy
+HighProviderNumberZip() allows you to create a bar graph visuzalization of zip codes with the highest number of providers in a given state. 
+LowProviderNumberZip() allows you to create a bar graph visualization of the zip codes with the lowest number of providers in a  given state. Zip codes with zero providers are excluded. 
+BottomFiveZipcodes() allows you to create a bar graph visualization of the five zip codes with the lowest number of providers (with at least one provider) in a state.
+TopFiveZipcodes() allows you to create a bar graph visualization of the five zip codes with the highest number of providers (with at least one provider) in a state.
+TopTaxonomiesZip() allows you to output a bar graph of the taxonomy types with the highest numbers of providers in them by zip code. 
+BottomTaxonomiesZip() allows you to output a bar graph of the taxonomy types with the lowest numbers of providers in them by zip code. 
+
+##Function examples
+
+<strong>GetDataFromState</strong>
+If you give a state and a provider taxonomy, it will input these into the NPI data base and return a data frame with providers within that taxinomical category, in the given state. State should be input as the state abbreviation within quotation marks. Provider taxonomy should also be input in quotation marks. 
+```{r}
+GetDataFromState("RI", "Mental Health")
+```
 
 <strong>NumProviderInZip</strong>
 This function allows you to determine the number of providers in a zipcode given a specific taxonomy (such as Mental Health, Primary Care...)
 ```{r}
 NumProviderInZip("02906", "Mental Health")
 ```
+
+
+#Customizable Visualizations
+
+<strong>HighProviderNumberZip()</strong>
+This function allows you to output a visualization of the zip codes with the highest number of providers in a state. It takes the argument HighProviderNumberZip(data) to show the zip codes with the highest number of providers in a bar graph.
+```{r}
+HighProviderNumberZip(data)
+```
+
+<strong>LowProviderNumberZip()</strong>
+This function allows you to output a visualization of the zip codes with the lowest number of providers in a state (with at least one provider minimum in the zip code). It takes the argument HighProviderNumberZip(data) to show the zip codes with the lowest number of providers in a bar graph.
+```{r}
+LowProviderNumberZip(data)
+```
+
+<strong>BottomFiveZipcodes()</strong>
+This function allows you to output a visualization of the five zip codes with the lowest number of providers (with at least one provider) in a state in a bar graph.
+```{r}
+BottomFiveZipcodes(data)
+```
+
+<strong>TopFiveZipcodes()</strong>
+This function allows you to output a visualization of the five zip codes with the highest number of providers in a state in a bar graph.
+```{r}
+TopFiveZipcodes(data)
+```
+
+<strong>TopTaxonomiesZip()</strong>
+This function allows you to output a visualization of the taxonomy types with the highest numbers of providers in them by zip code. 
+```{r}
+TopTaxonomiesZip(data)
+```
+
+<strong>BottomTaxonomiesZip()</strong>
+This function allows you to output a visualization of the taxonomy types with the highest numbers of providers in them by zip code. 
+```{r}
+BottomTaxonomiesZip(data)
+```
+
