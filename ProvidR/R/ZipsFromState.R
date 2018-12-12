@@ -6,6 +6,10 @@ if(!require(zipcode)){
   library(zipcode)
 }
 
+if(!require(dplyr)){
+  install.packages("dplyr")
+  library(dplyr)
+}
 
 ZipsFromState<-function(state_name){
   data(zipcode)
