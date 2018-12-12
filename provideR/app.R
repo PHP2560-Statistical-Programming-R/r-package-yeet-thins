@@ -28,12 +28,12 @@ ui <- fluidPage(
   # Sidebar with a slider input for number of bins d
   sidebarLayout(
     sidebarPanel(
-      textInput("state", label = h3("Text input"), value = "State abbreviation"),
+      textInput("state", label = h3("State Abbreviation"), value = "RI"),
       
       hr(),
       fluidRow(column(3, verbatimTextOutput("value"))),  
       
-      textInput("Taxonomy", label = h3("Text input"), value = "Taxonomy"),
+      textInput("Taxonomy", label = h3("Taxonomy"), value = "Mental Health"),
       
       hr(),
       fluidRow(column(3, verbatimTextOutput("value"))), 
