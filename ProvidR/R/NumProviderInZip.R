@@ -1,39 +1,42 @@
 #' NumProvidersInZip
 #' This function takes a zip code and a provider taxonomy and outputs the number of providers in a zip codes
 
-if(!require(dplyr)){
-  install.packages("dplyr")
-  library(dplyr)
-}
-
-if(!require(rvest)){
-  install.packages("rvest")
-  library(rvest)
-}
-
-if(!require(XML)){
-  install.packages("XML")
-  library(XML)
-}
-
-if(!require(stringr)){
-  install.packages("stringr")
-  library(stringr)
-}
-
-if(!require(stringi)){
-  install.packages("stringri")
-  library(stringi)
-}
-
 NumProviderInZip<-function(zipcode,taxonomy){
+  #install/load required packages
+  if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  
+  if(!require(rvest)){
+    install.packages("rvest")
+    library(rvest)
+  }
+  
+  if(!require(XML)){
+    install.packages("XML")
+    library(XML)
+  }
+  
+  if(!require(stringr)){
+    install.packages("stringr")
+    library(stringr)
+  }
+  
+  if(!require(stringi)){
+    install.packages("stringri")
+    library(stringi)
+  }
+  #load in census data
   load("ProvidR/Data/zcta_county_rel_10.Rda")
   load("ProvidR/Data/co_est2017.Rda")
   zip_link = zcta_county_rel_10
   census = co_est2017_alldata
+  #prepare to pull data
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
+  #pull data
   for (i in 1:length(zipcode)) { #iterating over all RI zip codes
     for (j in 1:length(skips)){ #also iterating over skils
       zip <- zipcode[i]

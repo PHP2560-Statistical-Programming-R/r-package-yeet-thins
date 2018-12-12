@@ -1,69 +1,70 @@
 #checking if packages are installed; installing them if not
-if(!require(rvest)){
-  install.packages("rvest")
-  library(rvest)
-}
-
-if(!require(httr)){
-  install.packages("httr")
-  library(httr)
-}
-
-if(!require(dplyr)){
-  install.packages("dplyr")
-  library(dplyr)
-}
-
-if(!require(jsonlite)){
-  install.packages("jsonlite")
-  library(jsonlite)
-}
-
-if(!require(XML)){
-  install.packages("XML")
-  library(XML)
-}
-
-if(!require(stringr)){
-  install.packages("stringr")
-  library(stringr)
-}
-
-if(!require(zipcode)){
-  install.packages("zipcode")
-  library(zipcode)
-}
-
-if(!require(ggplot2)){
-  install.packages("ggplot2")
-  library(ggplot2)
-}
-
-if(!require(stringi)){
-  install.packages("stringi")
-  library(stringi)
-}
-
-if(!require(roxygen2)){
-  install.packages("roxygen2")
-  library(roxygen2)
-}
-
-if(!require(testthat)){
-  install.packages("testthat")
-  library(testthat)
-}
-
-ZipsFromState<-function(state_name){
-  zip_holder<-zipcode%>%
-    filter(state==state_name)%>%
-    select(zip)
-  zip_state<-zip_holder[,1]
-  return(zip_state)
-}
-
-
 ProviderInStateByCounty<-function(state,taxonomy){
+  #install/load required packages
+  if(!require(rvest)){
+    install.packages("rvest")
+    library(rvest)
+  }
+  
+  if(!require(httr)){
+    install.packages("httr")
+    library(httr)
+  }
+  
+  if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  
+  if(!require(jsonlite)){
+    install.packages("jsonlite")
+    library(jsonlite)
+  }
+  
+  if(!require(XML)){
+    install.packages("XML")
+    library(XML)
+  }
+  
+  if(!require(stringr)){
+    install.packages("stringr")
+    library(stringr)
+  }
+  
+  if(!require(zipcode)){
+    install.packages("zipcode")
+    library(zipcode)
+  }
+  
+  if(!require(ggplot2)){
+    install.packages("ggplot2")
+    library(ggplot2)
+  }
+  
+  if(!require(stringi)){
+    install.packages("stringi")
+    library(stringi)
+  }
+  
+  if(!require(roxygen2)){
+    install.packages("roxygen2")
+    library(roxygen2)
+  }
+  
+  if(!require(testthat)){
+    install.packages("testthat")
+    library(testthat)
+  }
+  
+  ZipsFromState<-function(state_name){
+    zip_holder<-zipcode%>%
+      filter(state==state_name)%>%
+      select(zip)
+    zip_state<-zip_holder[,1]
+    return(zip_state)
+  }
+
+  #pull data
   zips_used <- ZipsFromState(state)
   
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from

@@ -4,12 +4,13 @@
 #'@return a data fram
 #
 
-if(!require(dplyr)){
-  install.packages("dplyr")
-  library(dplyr)
-}
-
 SummaryByCounty<-function(df){
+  #install/load required packages
+  if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  #process data
   rows<-df %>%
     group_by(CTYNAME, POPESTIMATE2010, Abbreviation, state.name) %>%
     count() %>%
