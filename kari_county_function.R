@@ -91,6 +91,8 @@ ProviderInStateByCounty<-function(state,taxonomy){
   
   provider.data$state.name <- noquote(str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
   
+  provider.data <- filter(provider.data,state.name==state)
+  
   zip_link<-read.csv("zcta_county_rel_10.txt") %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
@@ -101,14 +103,22 @@ ProviderInStateByCounty<-function(state,taxonomy){
   census<-read.csv("co-est2017-alldata.csv")
   
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
+  NPI_to_census$state.name.long <- NPI_to_census$STNAME
+  
+  state_abbrev <- read.csv("state_abbrev.txt")
+  state_abbrev$state.name.long <- state_abbrev$State
+  
+  NPI_states <- left_join(NPI_to_census, state_abbrev, by=c("state.name.long"))
+  
+  head(NPI_states)
   
   #5. Return the summary measure
-  rows<-NPI_to_census %>%
-    group_by(CTYNAME, POPESTIMATE2010, state.name) %>%
-    count() %>%
-    filter(state.name==state) %>%
-    arrange(n)
-  return(rows)
+ # rows<-NPI_to_census %>%
+#    group_by(CTYNAME, POPESTIMATE2010, Abbreviation, state.name.long) %>%
+ #   count() %>%
+#    filter(Abbreviation==state.name)
+#    arrange(n)
+#  return(rows)
 }
 
 
