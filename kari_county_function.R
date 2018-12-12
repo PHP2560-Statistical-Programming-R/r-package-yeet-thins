@@ -110,17 +110,27 @@ ProviderInStateByCounty<-function(state,taxonomy){
   
   NPI_states <- left_join(NPI_to_census, state_abbrev, by=c("state.name.long"))
   
+  return(NPI_states)
+  
+}
+  
+test.data <- ProviderInStateByCounty("RI","mental health")
+
+#Next function
+  
   #5. Return the summary measure
-  rows<-NPI_states %>%
+
+SummaryByCounty<-function(df){
+  rows<-df %>%
     group_by(CTYNAME, POPESTIMATE2010, Abbreviation, state.name) %>%
     count() %>%
     filter(Abbreviation==state.name) %>%
     select(CTYNAME, POPESTIMATE2010, state.name, n) %>%
+    mutate(provider_density = n/POPESTIMATE2010*1000) %>%
     arrange(n)
   return(rows)
 }
 
+summary.stats <- SummaryByCounty(test.data)
 
-ProviderInStateByCounty("RI","mental health")
-
-
+summary.stats
