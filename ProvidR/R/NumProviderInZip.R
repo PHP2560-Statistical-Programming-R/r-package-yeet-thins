@@ -1,20 +1,30 @@
 #' NumProvidersInZip
 #' This function takes a zip code and a provider taxonomy and outputs the number of providers in a zip codes
-library(rvest)
-library(httr)
-library(dplyr)
-library(jsonlite)
-library(XML)
-library(stringr)
-library(zipcode)
-library(dplyr)
-library(stringr)
-library(ggplot2)
-library(stringi)
-library(roxygen2)
-library(testthat)
-library(repmis)
 
+if(!require(dplyr)){
+  install.packages("dplyr")
+  library(dplyr)
+}
+
+if(!require(rvest)){
+  install.packages("rvest")
+  library(rvest)
+}
+
+if(!require(XML)){
+  install.packages("XML")
+  library(XML)
+}
+
+if(!require(stringr)){
+  install.packages("stringr")
+  library(stringr)
+}
+
+if(!require(stringi)){
+  install.packages("stringri")
+  library(stringi)
+}
 
 NumProviderInZip<-function(zipcode,taxonomy){
   load("ProvidR/Data/zcta_county_rel_10.Rda")
@@ -31,8 +41,8 @@ NumProviderInZip<-function(zipcode,taxonomy){
       tax <- str_replace_all(taxonomy," ","+")
       url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
       #text scrape to pull our places by zip code
-      h <- read_html(url, timeout = 200)
-      reps <- h %>% #setting up the repeating structure
+      h <- ?read_html(url, timeout = 200)
+      reps < h %>% #setting up the repeating structure
         html_node("table") %>%
         html_table()
       if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code

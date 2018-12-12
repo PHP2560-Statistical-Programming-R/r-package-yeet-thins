@@ -1,4 +1,4 @@
-#'BaseFunction
+#BaseFunction
 
 library(rvest)
 library(httr)
@@ -59,5 +59,6 @@ census = co_est2017_alldata
 
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   return(NPI_to_census)
+  
 }
 

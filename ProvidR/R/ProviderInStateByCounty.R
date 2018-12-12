@@ -4,19 +4,9 @@ if(!require(rvest)){
   library(rvest)
 }
 
-if(!require(httr)){
-  install.packages("httr")
-  library(httr)
-}
-
 if(!require(dplyr)){
   install.packages("dplyr")
   library(dplyr)
-}
-
-if(!require(jsonlite)){
-  install.packages("jsonlite")
-  library(jsonlite)
 }
 
 if(!require(XML)){
@@ -29,32 +19,10 @@ if(!require(stringr)){
   library(stringr)
 }
 
-if(!require(zipcode)){
-  install.packages("zipcode")
-  library(zipcode)
-}
-
-if(!require(ggplot2)){
-  install.packages("ggplot2")
-  library(ggplot2)
-}
-
 if(!require(stringi)){
   install.packages("stringi")
   library(stringi)
 }
-
-if(!require(roxygen2)){
-  install.packages("roxygen2")
-  library(roxygen2)
-}
-
-if(!require(testthat)){
-  install.packages("testthat")
-  library(testthat)
-}
-
-
 
 ProviderInStateByCounty<-function(state,taxonomy){
   zips_used <- ZipsFromState(state)

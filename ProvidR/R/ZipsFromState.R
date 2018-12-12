@@ -1,23 +1,14 @@
 #' ZipsFromState
 #' Pulls out all the zipcodes from a state
-library(rvest)
-library(httr)
-library(dplyr)
-library(jsonlite)
-library(XML)
-library(stringr)
-library(zipcode)
-library(dplyr)
-library(stringr)
-library(ggplot2)
-library(stringi)
-library(roxygen2)
-library(testthat)
-library(repmis)
 
+if(!require(zipcode)){
+  install.packages("zipcode")
+  library(zipcode)
+}
 
 
 ZipsFromState<-function(state_name){
+  data(zipcode)
   zip_holder<-zipcode%>%
     filter(state==state_name)%>%
     select(zip)
