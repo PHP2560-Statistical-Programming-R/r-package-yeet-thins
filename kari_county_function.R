@@ -100,12 +100,12 @@ ProviderInStateByCounty<-function(state,taxonomy){
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
   
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
-  census<-read.csv("co-est2017-alldata.csv")
+  census<-read.csv("co-est2017-alldata.csv") #change this data source in package
   
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   NPI_to_census$state.name.long <- NPI_to_census$STNAME
   
-  state_abbrev <- read.csv("state_abbrev.txt")
+  state_abbrev <- read.csv("state_abbrev.txt") #change this data source in package
   state_abbrev$state.name.long <- state_abbrev$State
   
   NPI_states <- left_join(NPI_to_census, state_abbrev, by=c("state.name.long"))
