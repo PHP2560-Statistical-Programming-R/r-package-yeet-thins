@@ -1,4 +1,7 @@
-
+#' Group by unit
+#' This groups different units together
+#' @param "state_name"
+#' @return all the zipcodes from a state
 source("Libraries.R")
 check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
                  "ggplot2", "stringi", "roxygen2", "testthat"))

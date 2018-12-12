@@ -13,4 +13,3 @@ ZipsFromState<-function(state_name){
   return(zip_state)
 }
 
-document()

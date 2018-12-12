@@ -1,3 +1,8 @@
+#' NumProvidersInZip
+#' This function takes a zip code and a provider taxonomy and outputs the number of providers in a zip codes
+#' @param "zipcode" "taxonomy"
+#' @return The number of providers in a zipcode
+
 source("Libraries.R")
 check_packages(c("rvest", "httr", "dplyr", "jsonlite", "XML", "stringr", "zipcode",
                  "ggplot2", "stringi", "roxygen2", "testthat"))
