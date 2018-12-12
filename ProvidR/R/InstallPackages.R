@@ -1,0 +1,15 @@
+#'Install all the packages
+#'This file contains all of the packages that you will need to make our function work
+install.packages('rvest')
+install.packages('httr')
+install.packages('dplyr')
+install.packages('jsonlite')
+install.packages('XML')
+install.packages('stringr')
+install.packages('zipcode')
+install.packages('dplyr')
+install.packages('ggplot2')
+install.packages('stringi')
+install.packages('roxygen2')
+install.packages('testthat')
+install.packages('repmis')
