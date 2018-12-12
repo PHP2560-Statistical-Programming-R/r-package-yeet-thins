@@ -1,3 +1,5 @@
+#'BaseFunction
+
 library(rvest)
 library(httr)
 library(dplyr)
