@@ -19,8 +19,10 @@ githuburl1<-"https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet
 githuburl2<-"https://github.com/PHP2560-Statistical-Programming-R/r-package-yeet-thins/blob/master/ProvidR/Data/co_est2017.Rda"
 
 NPIcode_taxonomy<-function(zipcode,taxonomy){
-  zip_link<-load("ProvidR/Data/zcta_county_rel_10.Rda")
-  census<-load("ProvidR/Data/co_est2017.Rda")
+load("ProvidR/Data/zcta_county_rel_10.Rda")
+load("ProvidR/Data/co_est2017.Rda")
+zip_link = zcta_county_rel_10
+census = co_est2017_alldata
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
@@ -55,6 +57,8 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
 
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
+  
+  NPI_join$STATE<-as.character(NPI_join$STATE)
 
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   return(NPI_to_census)
