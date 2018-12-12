@@ -31,15 +31,20 @@ ui <- fluidPage(
       textInput("state", label = h3("Text input"), value = "State abbreviation"),
       
       hr(),
-      fluidRow(column(3, verbatimTextOutput("value")))
+      fluidRow(column(3, verbatimTextOutput("value"))),  
       
-      ,  textInput("Taxonomy", label = h3("Text input"), value = "Taxonomy"),
+      textInput("Taxonomy", label = h3("Text input"), value = "Taxonomy"),
+      
+      hr(),
+      fluidRow(column(3, verbatimTextOutput("value"))), 
+      
+      radioButtons("Graph", label = h3("Radio buttons"),
+                  choices = list("Zip codes with highest provider coverage" = 1, "Zip codes with lowest provider coverage" = 2, "Number of zip codes with low provider coverage" = 3, "Number of zip codes with high provider coverage"= 4, "Least common taxonomies in state" = 5, "Most common taxonomies in state"=6), 
+                  selected = 1),
       
       hr(),
       fluidRow(column(3, verbatimTextOutput("value")))
-      
-    ), 
-    
+    ),
     
     # Show a plot of the generated distribution
     mainPanel(
