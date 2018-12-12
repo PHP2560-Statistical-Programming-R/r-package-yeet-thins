@@ -4,7 +4,7 @@ author: "Alexander Adia"
 date: "December 8, 2018"
 output: html_document
 ---
-
+ 
 ```{r}
 library(rvest)
 library(httr)
@@ -136,7 +136,7 @@ provider_data<-ProvidersInStateByCounty("RI", "Mental Health")
 
 
 ```{r}
-#everything below here is a-okay
+#output a visualization of the zip codes with the lowest number of providers in a state (with at least one provider minimum in the zip code)
 LowProviderNumberZip<-function(data){
     counts<-countbyzip(data)
   number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
@@ -146,12 +146,17 @@ LowProviderNumberZip<-function(data){
 number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
   plot<-ggplot(number_practices.low, aes(x=n, y=nn))+
   geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")+
-  scale_color_gradientn(colours = rainbow)
+  scale_color_gradientn(colours = terrain.colors(10))
 print(plot + ggtitle("Zip codes with low numbers of providers"))
 }
+
+
 LowProviderNumberZip(testdata)
 
+print(testdata)
+  data <- testdata
 ```
+
 
 ```{r}
 HighProviderNumberZip<-function(data){
@@ -164,7 +169,7 @@ number_practices.high <- head(number_practices) #getting the first rows of the n
   plot<-ggplot(number_practices.high, aes(x=n, y=nn))+
   geom_bar(stat="identity") + labs(x = "Number of providers", y = "Number of zip codes")
 print(plot + ggtitle("Zip codes with low numbers of providers"))+
-    scale_color_gradientn(colours = rainbow)
+    scale_color_gradientn(colours = rainbow)  
 }
 HighProviderNumberZip(testdata)
 
