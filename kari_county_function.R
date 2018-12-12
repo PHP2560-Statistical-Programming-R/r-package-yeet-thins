@@ -83,6 +83,7 @@ ProviderInStateByCounty<-function(state,taxonomy){
       if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
         break}
       reps$zip <- zips_used[i]
+      reps$state_name <- state
       provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
@@ -93,9 +94,7 @@ ProviderInStateByCounty<-function(state,taxonomy){
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
-  zip_link$zipcode = str_pad_left(zip_link$zipcode, 5, "0")
-  
-  head(zip_link)
+  zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
   
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
   census<-read.csv("co-est2017-alldata.csv")
@@ -105,12 +104,11 @@ ProviderInStateByCounty<-function(state,taxonomy){
   head(NPI_to_census)
   
   #5. Return the summary measure
-  #rows<-NPI_to_census %>%
-  #  group_by(CTYNAME, POPESTIMATE2010) %>%
-  #  count() %>%
-  #  arrange(n)
-  #return(rows)
-  
+#  rows<-NPI_to_census %>%
+#    group_by(CTYNAME, POPESTIMATE2010) %>%
+#    count() %>%
+#    arrange(n)
+#  return(rows)
 }
 
 
