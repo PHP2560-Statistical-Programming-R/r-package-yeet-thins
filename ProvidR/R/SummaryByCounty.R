@@ -5,9 +5,9 @@
 #
 
 SummaryByCounty<-function(state, taxonomy){
-  df <- ProviderInStateByCounty(state,taxonomy)
+  prov.dat <- ProviderInStateByCounty(state,taxonomy)
   #process data
-  rows <- group_by(df, CTYNAME, POPESTIMATE2010, state.name, STNAME, Abbreviation) %>%
+  rows <- group_by(prov.dat, CTYNAME, POPESTIMATE2010, state.name, STNAME, Abbreviation) %>%
     count() %>%
     filter(Abbreviation==state) %>%
     select(CTYNAME, POPESTIMATE2010, STNAME, n) %>%
