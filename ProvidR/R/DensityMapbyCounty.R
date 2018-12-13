@@ -20,7 +20,7 @@ DensityMapByCounty<-function(state,taxonomy) {
   us.shape<-getData('GADM', country='USA', level=2)  #Get the County (level 2) Shapefile for the US
   state.shape<-subset(us.shape,NAME_1==state.name[1])
   dat.sum$NAME_2 <- sub(pattern=" County", replacement="", dat.sum$CTYNAME)
-  state.map <- merge(state.shape, df.sum, by.x='NAME_2', by.y='NAME_2')
+  state.map <- merge(state.shape, dat.sum, by.x='NAME_2', by.y='NAME_2')
   #unloading raster because it masks select
   detach("package:raster", unload=TRUE)
   #making colors (white to red)
