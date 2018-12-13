@@ -29,5 +29,6 @@ DensityMapByCounty<-function(state,taxonomy) {
   prov <- state.map$provider_density
   cols <- (prov - min(prov))/diff(range(prov))*127+1
   #the final product
-  return(plot(state.map, col=cols))
+  p <- plot(state.map, col=cols)
+  print(p)
 }
