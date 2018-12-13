@@ -42,7 +42,7 @@ ProviderInStateByCounty<-function(state,taxonomy){
       tax <- str_replace_all(taxonomy," ","+")
       url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
       #text scrape to pull our places by zip code
-      h <- read_html(url, timeout = 200)
+      h <- read_html(url, timeout = 500)
       reps <- h %>% #setting up the repeating structure
         html_node("table") %>%
         html_table()
@@ -70,11 +70,11 @@ ProviderInStateByCounty<-function(state,taxonomy){
   NPI_join$STATE<-as.character(NPI_join$STATE)
 
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-  NPI_to_census$state.name.long <- NPI_to_census$STNAME
+  NPI_to_census$state.name.long <- as.character(NPI_to_census$STNAME)
 
   load("ProvidR/Data/state_abbrev.Rda")
 
-  state_abbrev$state.name.long <- state_abbrev$State
+  state_abbrev$state.name.long <- as.character(state_abbrev$State)
 
   NPI_states <- left_join(NPI_to_census, state_abbrev, by=c("state.name.long"))
 

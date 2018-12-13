@@ -23,7 +23,7 @@ DensityMapByCounty<-function(state,taxonomy) {
   state.map <- merge(state.shape, dat.sum, by.x='NAME_2', by.y='NAME_2')
   #unloading raster because it masks dplyr's select
   detach("package:raster", unload=TRUE)
-  #making colors (white to red)
+  #making colors
   p <- colorRampPalette(c("white", "red"))(128)
   palette(p)
   prov <- state.map$provider_density
