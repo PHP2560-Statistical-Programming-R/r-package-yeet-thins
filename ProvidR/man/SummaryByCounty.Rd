@@ -5,7 +5,7 @@
 \title{SummaryByCounty
 This function gives you the numver of providers in each county, the number of providers per 1,000 people, and the population of the county}
 \usage{
-SummaryByCounty(df)
+SummaryByCounty(state, taxonomy)
 }
 \arguments{
 \item{a}{data from from provider in the state by county}
