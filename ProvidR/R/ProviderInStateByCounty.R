@@ -1,14 +1,14 @@
 #checking if packages are installed; installing them if not
 ProviderInStateByCounty<-function(state,taxonomy){
   #install/load required packages
+ if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  
   if(!require(rvest)){
     install.packages("rvest")
     library(rvest)
-  }
-  
-  if(!require(dplyr)){
-    install.packages("dplyr")
-    library(dplyr)
   }
   
   if(!require(XML)){
@@ -16,16 +16,16 @@ ProviderInStateByCounty<-function(state,taxonomy){
     library(XML)
   }
   
-  if(!require(stringr)){
-    install.packages("stringr")
-    library(stringr)
-  }
-  
   if(!require(stringi)){
     install.packages("stringi")
     library(stringi)
   }
   
+  if(!require(stringr)){
+    install.packages("stringr")
+    library(stringr)
+  }
+
   #pull data
   zips_used <- ZipsFromState(state)
   load("ProvidR/Data/zcta_county_rel_10.Rda")

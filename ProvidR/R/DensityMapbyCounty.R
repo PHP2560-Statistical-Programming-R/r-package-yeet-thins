@@ -18,7 +18,7 @@ DensityMapByCounty<-function(df,state) {
   us.shape<-getData('GADM', country='USA', level=2)  #Get the County (level 2) Shapefile for the US
   state.shape<-subset(us.shape,NAME_1==state)
   df$NAME_2 <- sub(pattern=" County", replacement="", df$CTYNAME) 
-  state.map <- merge(state.shape, test2, by.x='NAME_2', by.y='NAME_2')
+  state.map <- merge(state.shape, df, by.x='NAME_2', by.y='NAME_2')
   #making colors (white to red)
   p <- colorRampPalette(c("white", "red"))(128)
   palette(p)
