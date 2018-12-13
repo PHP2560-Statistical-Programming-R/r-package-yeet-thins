@@ -9,9 +9,9 @@ SummaryByCounty<-function(state, taxonomy){
   #process data
   rows <- prov.dat %>%
     filter(Abbreviation==state) %>%
-    group_by(CTYNAME, STNAME, POPESTIMATE2010) %>%
+    group_by(CTYNAME, STNAME, POPESTIMATE2010, state.name) %>%
     count() %>%
-    select(CTYNAME, POPESTIMATE2010, STNAME, n) %>%
+    select(CTYNAME, POPESTIMATE2010, STNAME, state.name, n) %>%
     mutate(provider_density = n/POPESTIMATE2010*1000) %>%
     arrange(n)
   return(rows)
