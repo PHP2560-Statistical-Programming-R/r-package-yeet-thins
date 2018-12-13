@@ -1,7 +1,7 @@
 #' DensityMapByCounty
 #' Maps providers per 1000 people by county
 
-DensityMapByCounty<-function(df,state) {
+DensityMapByCounty<-function(dat,state) {
   #install/load required packages
   if(!require(raster)){
     install.packages("raster")
@@ -15,6 +15,7 @@ DensityMapByCounty<-function(df,state) {
     install.packages("ggmap")
     library(ggmap)
   }
+  df <- dat
   us.shape<-getData('GADM', country='USA', level=2)  #Get the County (level 2) Shapefile for the US
   state.shape<-subset(us.shape,NAME_1==state)
   df$NAME_2 <- sub(pattern=" County", replacement="", df$CTYNAME) 

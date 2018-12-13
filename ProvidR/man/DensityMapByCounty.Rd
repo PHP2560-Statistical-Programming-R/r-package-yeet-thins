@@ -5,7 +5,7 @@
 \title{DensityMapByCounty
 Maps providers per 1000 people by county}
 \usage{
-DensityMapByCounty(df, state)
+DensityMapByCounty(dat, state)
 }
 \description{
 DensityMapByCounty
