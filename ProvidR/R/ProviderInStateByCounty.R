@@ -5,22 +5,22 @@ ProviderInStateByCounty<-function(state,taxonomy){
     install.packages("dplyr")
     library(dplyr)
   }
-  
+
   if(!require(rvest)){
     install.packages("rvest")
     library(rvest)
   }
-  
+
   if(!require(XML)){
     install.packages("XML")
     library(XML)
   }
-  
+
   if(!require(stringi)){
     install.packages("stringi")
     library(stringi)
   }
-  
+
   if(!require(stringr)){
     install.packages("stringr")
     library(stringr)
@@ -52,33 +52,34 @@ ProviderInStateByCounty<-function(state,taxonomy){
       provider.data <- rbind(provider.data,reps) #binding together the provider data and reps data
     }
   }
-  
+
   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-  
+
   provider.data$state.name <- noquote(str_extract(provider.data$Primary_Practice_Address,pattern="(?<=, )[A-Z]+(?=\\s)")) #state postal code (2 characters)
-  
+
   provider.data <- filter(provider.data,state.name==state)
-  
+
   zip_link<- zip_link %>%
     select(ZCTA5, STATE, COUNTY, GEOID) %>%
     rename(zipcode = ZCTA5) %>%
     mutate(zipcode = as.character(zipcode))
   zip_link$zipcode = stri_pad_left(zip_link$zipcode, 5, "0")
-  
+
   NPI_join<-inner_join(provider.data, zip_link, by="zipcode")
-  
+
   NPI_join$STATE<-as.character(NPI_join$STATE)
-  
+
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
   NPI_to_census$state.name.long <- NPI_to_census$STNAME
-  
-  state_abbrev <- read.csv("state_abbrev.txt") #change this data source in package
+
+  load("ProvidR/Data/state_abbrev.Rda")
+
   state_abbrev$state.name.long <- state_abbrev$State
-  
+
   NPI_states <- left_join(NPI_to_census, state_abbrev, by=c("state.name.long"))
-  
+
   return(NPI_states)
-  
+
 }
 
 
