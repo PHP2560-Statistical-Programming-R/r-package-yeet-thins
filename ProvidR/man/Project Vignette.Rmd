@@ -92,15 +92,14 @@ ProviderInStateByCounty("RI", "Primary Care")
 ```
 
 <strong>SummaryByCounty</strong>
-Given the data frame created by ProvidersinStateByCounty, this returns the number of providers in a county, the population of the county and the number of providers per 1,000 county residents. 
+This returns the number of providers in a county, the population of the county and the number of providers per 1,000 county residents. 
 ```{r}
-df<-ProviderInStateByCounty("RI", "Primary Care")
-SummaryByCounty(df)
+SummaryByCounty("RI", "Primary Care")
 ```
 
 <strong>DensityMapByCounty</strong>
-Given the data frame created by SummaryByCounty and the state name, this plots a heatmap of the provider density in each county in  the state.
+This plots a heatmap of the provider density in each county in  the state.
 ```{r}
-DensityMapByCounty(df,"Rhode Island")
+DensityMapByCounty("RI","Primary Care")
 ```
 
