@@ -98,3 +98,9 @@ df<-ProviderInStateByCounty("RI", "Primary Care")
 SummaryByCounty(df)
 ```
 
+<strong>DensityMapByCounty</strong>
+Given the data frame created by SummaryByCounty and the state name, this plots a heatmap of the provider density in each county in  the state.
+```{r}
+DensityMapByCounty(df,"Rhode Island")
+```
+
