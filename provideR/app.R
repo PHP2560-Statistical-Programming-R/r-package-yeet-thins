@@ -179,8 +179,7 @@ ui <- fluidPage(
                   selected = 1),
 
       hr(),
-      fluidRow(column(3, verbatimTextOutput("value"))),
-    actionButton("do", "Get Visualization")
+      fluidRow(column(3, verbatimTextOutput("value")))
     ),
     # Show a plot of the generated distribution
     mainPanel("Results",
@@ -193,9 +192,9 @@ ui <- fluidPage(
 
 #SERVER LOGIC
 server <- function(input, output) {
-  observeEvent(input$do, {
+
   serv_data<-GetDataFromState(input$state,input$Taxonomy)
-  
+
   
   #highest provider coverage
   if(input$Graph==1){
@@ -227,9 +226,7 @@ server <- function(input, output) {
     output$Plot <- renderPlot({
       BottomTaxonomiesZip(serv_data)})
   }
-})
 }
 
 # Run the application
 shinyApp(ui = ui, server = server)
-
