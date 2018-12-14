@@ -53,7 +53,8 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
 countbyzip <- function(data){data %>% #creating a count of practices by zip code
 group_by(zipcode) %>% 
 count() %>%
-arrange(n) 
+arrange(n)%>%
+  ungroup()
 }
 
 ZipsFromState<-function(state_name){
@@ -91,9 +92,8 @@ LowProviderNumberZip<-function(data){
   arrange(n) #arranging by frequency
 number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
   plot<-ggplot(number_practices.low, aes(x=n, y=nn))+
-  geom_bar(stat="identity", fill="blue", position=position_dodge()) + labs(x = "Number of providers", y = "Number of zip codes")+
+  geom_bar(stat="identity", fill="blue", position=position_dodge()) + labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with low numbers of providers")+
   theme_minimal()
-print(plot + ggtitle("Zip codes with low numbers of providers"))
 }
 LowProviderNumberZip(testdata)
 
@@ -111,8 +111,7 @@ number_practices.high <- head(number_practices) #getting the first rows of the n
   plot<-ggplot(number_practices.high, aes(x=n, y=nn))+
   geom_bar(stat="identity", fill = "blue")+
   theme_minimal()+
- labs(x = "Number of providers", y = "Number of zip codes")
-print(plot + ggtitle("Zip codes with high numbers of providers"))
+ labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with high numbers of providers")
 }
 HighProviderNumberZip(testdata)
 
@@ -126,11 +125,9 @@ count() %>%
 arrange(n) 
   counts<-head(counts_holder)
 plot<-ggplot(counts, aes(x=zipcode, y=n))+
-geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers")+
+geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers", title="Bottom five zip codes by provider number")+
     theme_minimal()+
   coord_flip()
-print(plot + ggtitle("Bottom five zip codes by provider number"))
-return(plot)
 }
 
 BottomFiveZipcodes(testdata)
@@ -144,11 +141,10 @@ count() %>%
 arrange(desc(n)) 
   counts<-head(counts_holder)
 plot<-ggplot(counts, aes(x=zipcode, y=n))+
-geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers")+
+geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers", title= "Top five zip codes by provider number")+
     theme_minimal()+ 
   coord_flip()
-print(plot + ggtitle("Top five zip codes by provider number"))
-return(plot)
+
 }
 
 TopFiveZipcodes(testdata)
@@ -163,10 +159,9 @@ arrange(desc(n))
 top5providers<-head(provider_grouping)
 providers_bar<-ggplot(top5providers, aes(x=Primary_Taxonomy, y=n))+
   geom_bar(stat="identity", fill = "blue")+
-  labs(x = "Provider Type", y = "Number of Providers")+
+  labs(x = "Provider Type", y = "Number of Providers", title="Top Provider Type in the Taxonomy")+
   theme_minimal() + 
   coord_flip()
-providers_bar
 }    
 TopTaxonomiesZip(testdata)
 ```
@@ -182,8 +177,7 @@ providers_bar<-ggplot(bottom5providers, aes(x=Primary_Taxonomy, y=n))+
   geom_bar(stat="identity", fill = "blue")+
   coord_flip()+
   theme_minimal()+
-  labs(x = "Provider Type", y = "Number of Providers")
-providers_bar
+  labs(x = "Provider Type", y = "Number of Providers", title="Least Common Provider Type in the Taxonomy")
 }
 BottomTaxonomiesZip(testdata)
 ```
