@@ -80,7 +80,6 @@ testdata<-GetDataFromState("RI", "Mental Health")
 ```
 
 
-
 ```{r}
 #output a visualization of the zip codes with the lowest number of providers in a state (with at least one provider minimum in the zip code)
 LowProviderNumberZip<-function(data){
@@ -166,7 +165,8 @@ providers_bar<-ggplot(top5providers, aes(x=Primary_Taxonomy, y=n))+
   labs(x = "Provider Type", y = "Number of Providers")+
   theme_minimal() + 
   coord_flip()
-providers_bar
+print(providers_bar + ggtitle("Number providers by taxonomy"))
+
 }    
 TopTaxonomiesZip(testdata)
 ```
@@ -183,7 +183,7 @@ providers_bar<-ggplot(bottom5providers, aes(x=Primary_Taxonomy, y=n))+
   coord_flip()+
   theme_minimal()+
   labs(x = "Provider Type", y = "Number of Providers")
-providers_bar
+print(providers_bar + ggtitle("Taxonomies with fewest number of proviers"))
 }
 BottomTaxonomiesZip(testdata)
 ```
