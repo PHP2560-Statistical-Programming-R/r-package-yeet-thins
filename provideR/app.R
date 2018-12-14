@@ -194,25 +194,25 @@ ui <- fluidPage(
 #SERVER LOGIC
 server <- function(input, output) {
   observeEvent(input$do, {
-  data<-reactive({
-    GetDataFromState(input$state, input$taxonomy)
-})
+  stateinput<-reactive({as.string(input$state)})
+  taxonomyinput<-reactive({as.string(input$Taxonomy)})
+  serv_data<-GetDataFromState(stateinput(), taxonomyinput())
 
-  
-output$Plot<-renderPlot({
   if(input$Graph==1){
-    TopFiveZipcodes(data)
+    plotted<-TopFiveZipcodes(serv_data)
   } else if(input$Graph==2){
-    BottomFiveZipcodes(data)
+    plotted<-BottomFiveZipcodes(serv_data)
   } else if(input$Graph==3){
-    HighProviderNumberZip(data)
+    plotted<-HighProviderNumberZip(serv_data)
   } else if(input$Graph==4){
-    LowProviderNumberZip(data)
+    plotted<-LowProviderNumberZip(serv_data)
   } else if(input$Graph==5){
-    TopTaxonomiesZip(data)
+    plotted<-TopTaxonomiesZip(serv_data)
   } else if(input$Graph==6){
-    BottomTaxonomiesZip(data)
+    plotted<-BottomTaxonomiesZip(serv_data)
   }
+output$plot<-renderPlot({
+  print(plotted)
 })
   })
 }

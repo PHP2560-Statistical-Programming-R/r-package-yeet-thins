@@ -223,5 +223,27 @@ if(input$Graph==2){
       BottomTaxonomiesZip(data)})
   }
 
+
+###
+
+
+output$Plot<-renderPlot({
+  if(input$Graph==1){
+    print(TopFiveZipcodes(serv_data))
+  } else if(input$Graph==2){
+    print(BottomFiveZipcodes(serv_data))
+  } else if(input$Graph==3){
+    print(HighProviderNumberZip(serv_data))
+  } else if(input$Graph==4){
+    print(LowProviderNumberZip(serv_data))
+  } else if(input$Graph==5){
+    print(TopTaxonomiesZip(serv_data))
+  } else if(input$Graph==6){
+    print(BottomTaxonomiesZip(serv_data))
+  }
+})
+  })
+}
+
 ```
 
