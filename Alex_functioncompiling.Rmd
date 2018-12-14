@@ -5,6 +5,7 @@ date: "December 8, 2018"
 output: html_document
 ---
  
+ 
 ```{r}
 library(rvest)
 library(httr)
