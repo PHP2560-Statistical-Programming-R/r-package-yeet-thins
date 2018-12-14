@@ -53,36 +53,42 @@ NumProviderInZip("02906", "Mental Health")
 <strong>HighProviderNumberZip()</strong>
 This function allows you to output a visualization of the zip codes with the highest number of providers in a state. It takes the argument HighProviderNumberZip(data) to show the zip codes with the highest number of providers in a bar graph.
 ```{r}
+data<-GetDataFromState("RI","mental health")
 HighProviderNumberZip(data)
 ```
 
 <strong>LowProviderNumberZip()</strong>
 This function allows you to output a visualization of the zip codes with the lowest number of providers in a state (with at least one provider minimum in the zip code). It takes the argument HighProviderNumberZip(data) to show the zip codes with the lowest number of providers in a bar graph.
 ```{r}
+data<-GetDataFromState("RI","mental health")
 LowProviderNumberZip(data)
 ```
 
 <strong>BottomFiveZipcodes()</strong>
 This function allows you to output a visualization of the five zip codes with the lowest number of providers (with at least one provider) in a state in a bar graph.
 ```{r}
+data<-GetDataFromState("RI","mental health")
 BottomFiveZipcodes(data)
 ```
 
 <strong>TopFiveZipcodes()</strong>
 This function allows you to output a visualization of the five zip codes with the highest number of providers in a state in a bar graph.
 ```{r}
+data<-GetDataFromState("RI","mental health")
 TopFiveZipcodes(data)
 ```
 
 <strong>TopTaxonomiesZip()</strong>
 This function allows you to output a visualization of the taxonomy types with the highest numbers of providers in them by zip code. 
 ```{r}
+data<-GetDataFromState("RI","mental health")
 TopTaxonomiesZip(data)
 ```
 
 <strong>BottomTaxonomiesZip()</strong>
 This function allows you to output a visualization of the taxonomy types with the highest numbers of providers in them by zip code. 
 ```{r}
+data<-GetDataFromState("RI","mental health")
 BottomTaxonomiesZip(data)
 ```
 
