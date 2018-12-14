@@ -186,7 +186,7 @@ ui <- fluidPage(
     ),
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("distPlot")
+      plotOutput("Plot")
     )
   )
 )
@@ -200,32 +200,32 @@ server <- function(input, output) {
 
   #highest provider coverage
 if(input$Graph==1){
-  output$distPlot <- renderPlot({
+  output$dPlot <- renderPlot({
   TopFiveZipcodes(data)})
 }
 #lowest provider coverage
   if(input$Graph==2){
-    output$distPlot <- renderPlot({
+    output$Plot <- renderPlot({
       BottomFiveZipcodes(data)})
   }  
   #number zip codes with high provider coverage
   if(input$Graph==3){
-    output$distPlot <- renderPlot({
+    output$Plot <- renderPlot({
       HighProviderNumberZip(data)})
   }
   #Number of zip codes with low provider coverage
   if(input$Graph==4){
-    output$distPlot <- renderPlot({
+    output$Plot <- renderPlot({
       LowProviderNumberZip(data)})
   }
   #Most common taxonomies in state
   if(input$Graph==5){
-    output$distPlot <- renderPlot({
+    output$Plot <- renderPlot({
       TopTaxonomiesZip(data)})
   }
   #Least common taxonomies in state
   if(input$Graph==6){
-    output$distPlot <- renderPlot({
+    output$Plot <- renderPlot({
       BottomTaxonomiesZip(data)})
   }
   })
