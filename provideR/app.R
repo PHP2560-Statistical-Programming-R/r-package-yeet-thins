@@ -198,11 +198,8 @@ server <- function(input, output) {
   taxonomyinput<-reactive({as.string(input$Taxonomy)})
   serv_data<-GetDataFromState(stateinput(), taxonomyinput())
 
-<<<<<<< HEAD
-=======
 
 output$Plot<-renderPlot({
->>>>>>> 4ec7c36236b1fe859dcf356197d237211e60fad9
   if(input$Graph==1){
     plotted<-TopFiveZipcodes(serv_data)
   } else if(input$Graph==2){
