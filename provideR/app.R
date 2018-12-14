@@ -201,14 +201,14 @@ server <- function(input, output) {
   #highest provider coverage
 if(input$Graph==1){
   output$distPlot <- renderPlot({
-  HighProviderNumberZip(data)})
+  TopFiveZipcodes(data)})
 }
 #lowest provider coverage
   if(input$Graph==2){
     output$distPlot <- renderPlot({
-      HighProviderNumberZip(data)})
+      BottomFiveZipcodes(data)})
   }  
-  #number zip codes with low
+  #number zip codes with high provider coverage
   if(input$Graph==3){
     output$distPlot <- renderPlot({
       HighProviderNumberZip(data)})
@@ -216,17 +216,17 @@ if(input$Graph==1){
   #Number of zip codes with low provider coverage
   if(input$Graph==4){
     output$distPlot <- renderPlot({
-      HighProviderNumberZip(data)})
+      LowProviderNumberZip(data)})
   }
   #Most common taxonomies in state
   if(input$Graph==5){
     output$distPlot <- renderPlot({
-      HighProviderNumberZip(data)})
+      TopTaxonomiesZip(data)})
   }
   #Least common taxonomies in state
   if(input$Graph==6){
     output$distPlot <- renderPlot({
-      HighProviderNumberZip(data)})
+      BottomTaxonomiesZip(data)})
   }
   })
 }
