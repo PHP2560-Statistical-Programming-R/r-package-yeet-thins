@@ -95,8 +95,8 @@ number_practices.low <- head(number_practices) #getting the first rows of the nu
   geom_bar(stat="identity", fill="blue", position=position_dodge()) + labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with low numbers of providers")+
   theme_minimal()
 }
-LowProviderNumberZip(testdata)
-
+yeet<-LowProviderNumberZip(testdata)
+print(yeet)
 ```  
 
 
