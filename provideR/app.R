@@ -48,9 +48,9 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
 }
 
 countbyzip <- function(data){data %>% #creating a count of practices by zip code
-    group_by(zipcode) %>% 
+    group_by(zipcode) %>%
     count() %>%
-    arrange(n) 
+    arrange(n)
 }
 
 ZipsFromState<-function(state_name){
@@ -99,9 +99,9 @@ HighProviderNumberZip<-function(data){
 
 BottomFiveZipcodes<-function(data){
   counts_holder<-data%>%
-    group_by(zipcode) %>% 
+    group_by(zipcode) %>%
     count() %>%
-    arrange(n) 
+    arrange(n)
   counts<-head(counts_holder)
   plot<-ggplot(counts, aes(x=zipcode, y=n))+
     geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers")+
@@ -112,34 +112,34 @@ BottomFiveZipcodes<-function(data){
 
 TopFiveZipcodes<-function(data){
   counts_holder<-data%>%
-    group_by(zipcode) %>% 
+    group_by(zipcode) %>%
     count() %>%
-    arrange(desc(n)) 
+    arrange(desc(n))
   counts<-head(counts_holder)
   plot<-ggplot(counts, aes(x=zipcode, y=n))+
     geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers")+
-    theme_minimal()+ 
+    theme_minimal()+
     coord_flip()
   print(plot + ggtitle("Top five zip codes by provider number"))
 }
 
 TopTaxonomiesZip<-function(data){
   provider_grouping<-data %>% #creating a count of practices by providers
-    group_by(Primary_Taxonomy) %>% 
+    group_by(Primary_Taxonomy) %>%
     count() %>%
     arrange(desc(n))
   top5providers<-head(provider_grouping)
   providers_bar<-ggplot(top5providers, aes(x=Primary_Taxonomy, y=n))+
     geom_bar(stat="identity", fill = "blue")+
     labs(x = "Provider Type", y = "Number of Providers")+
-    theme_minimal() + 
+    theme_minimal() +
     coord_flip()
   providers_bar
-}    
+}
 
 BottomTaxonomiesZip<-function(data){
   provider_grouping<-data %>% #creating a count of practices by providers
-    group_by(Primary_Taxonomy) %>% 
+    group_by(Primary_Taxonomy) %>%
     count() %>%
     arrange(n)
   bottom5providers<-head(provider_grouping)
@@ -156,28 +156,28 @@ BottomTaxonomiesZip<-function(data){
 
 #Defining the UI
 ui <- fluidPage(
-  
+
   # Application title
   titlePanel("ProvidR: Visualizing Providers of a Given Type in a County or State"),
-  
+
   # Sidebar with a slider input for number of bins d
   sidebarLayout(
     sidebarPanel(
       helpText("Please input a state abbreviation, a taxonomy, and a graphing option. ProvidR will return a visualization."),
       textInput("state", label = h3("State Abbreviation"), value = "RI"),
-      
+
       hr(),
-      fluidRow(column(3, verbatimTextOutput("value"))),  
-      
+      fluidRow(column(3, verbatimTextOutput("value"))),
+
       textInput("Taxonomy", label = h3("Taxonomy"), value = "Mental Health"),
-      
+
       hr(),
-      fluidRow(column(3, verbatimTextOutput("value"))), 
-      
+      fluidRow(column(3, verbatimTextOutput("value"))),
+
       radioButtons("Graph", label = h3("Graphing Option"),
-                  choices = list("Zip codes with highest provider coverage" = 1, "Zip codes with lowest provider coverage" = 2, "Number of zip codes with high provider coverage" = 3, "Number of zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6), 
+                  choices = list("Zip codes with highest provider coverage" = 1, "Zip codes with lowest provider coverage" = 2, "Number of zip codes with high provider coverage" = 3, "Number of zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
                   selected = 1),
-      
+
       hr(),
       fluidRow(column(3, verbatimTextOutput("value"))),
     actionButton("do", "Get Visualization")
@@ -198,6 +198,11 @@ server <- function(input, output) {
   taxonomyinput<-reactive({as.string(input$Taxonomy)})
   serv_data<-GetDataFromState(stateinput(), taxonomyinput())
 
+<<<<<<< HEAD
+=======
+
+output$Plot<-renderPlot({
+>>>>>>> 4ec7c36236b1fe859dcf356197d237211e60fad9
   if(input$Graph==1){
     plotted<-TopFiveZipcodes(serv_data)
   } else if(input$Graph==2){
@@ -217,6 +222,6 @@ output$plot<-renderPlot({
   })
 }
 
-# Run the application 
+# Run the application
 shinyApp(ui = ui, server = server)
 
