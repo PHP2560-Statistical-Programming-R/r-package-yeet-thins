@@ -176,7 +176,7 @@ ui <- fluidPage(
       fluidRow(column(3, verbatimTextOutput("value"))),
 
       radioButtons("graph", label = h3("Graphing Option"),
-                  choices = list("Zip codes with highest provider coverage" = 1, "Zip codes with lowest provider coverage" = 2, "Number of zip codes with high provider coverage" = 3, "Number of zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
+                  choices = list("Zip codes with high provider coverage" = 1, "Zip codes with low provider coverage" = 2, "Top 5 zip codes with high provider coverage" = 3, "Top 5  zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
                   selected = 1),
 
       hr(),
