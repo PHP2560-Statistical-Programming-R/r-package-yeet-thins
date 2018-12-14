@@ -175,16 +175,16 @@ ui <- fluidPage(
       fluidRow(column(3, verbatimTextOutput("value"))),
 
       radioButtons("Graph", label = h3("Graphing Option"),
-                  choices = list("Zip codes with highest provider coverage" = 1, "Zip codes with lowest provider coverage" = 2, "Number of zip codes with high provider coverage" = 3, "Number of zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
-                  selected = 1),
+                   choices = list("Zip codes with highest provider coverage" = 1, "Zip codes with lowest provider coverage" = 2, "Number of zip codes with high provider coverage" = 3, "Number of zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
+                   selected = 1),
 
       hr(),
       fluidRow(column(3, verbatimTextOutput("value"))),
-    actionButton("do", "Get Visualization")
+      actionButton("do", "Get Visualization")
     ),
     # Show a plot of the generated distribution
-    mainPanel("Results",
-      plotOutput("plot")
+    mainPanel(
+      plotOutput("Plot")
     )
   )
 )
@@ -194,42 +194,33 @@ ui <- fluidPage(
 #SERVER LOGIC
 server <- function(input, output) {
   observeEvent(input$do, {
-  serv_data<-GetDataFromState(input$state,input$Taxonomy)
-  
-  
-  #highest provider coverage
-  if(input$Graph==1){
-    output$Plot <- renderPlot({
-      TopFiveZipcodes(serv_data)})
+    stateinput<-reactive({as.string(input$state)})
+    taxonomyinput<-reactive({as.string(input$Taxonomy)})
+    serv_data<-GetDataFromState(stateinput(), taxonomyinput())
+
+
+    output$Plot<-renderPlot({
+      if(input$Graph==1){
+        plotted<-TopFiveZipcodes(serv_data)
+      } else if(input$Graph==2){
+        plotted<-BottomFiveZipcodes(serv_data)
+      } else if(input$Graph==3){
+        plotted<-HighProviderNumberZip(serv_data)
+      } else if(input$Graph==4){
+        plotted<-LowProviderNumberZip(serv_data)
+      } else if(input$Graph==5){
+        plotted<-TopTaxonomiesZip(serv_data)
+      } else if(input$Graph==6){
+        plotted<-BottomTaxonomiesZip(serv_data)
+      }
+      output$plot<-renderPlot({
+        print(plotted)
+      })
+    })
   }
-  #lowest provider coverage
-  if(input$Graph==2){
-    output$Plot <- renderPlot({
-      BottomFiveZipcodes(serv_data)})
-  }  
-  #number zip codes with high provider coverage
-  if(input$Graph==3){
-    output$Plot <- renderPlot({
-      HighProviderNumberZip(serv_data)})
-  }
-  #Number of zip codes with low provider coverage
-  if(input$Graph==4){
-    output$Plot <- renderPlot({
-      LowProviderNumberZip(serv_data)})
-  }
-  #Most common taxonomies in state
-  if(input$Graph==5){
-    output$Plot <- renderPlot({
-      TopTaxonomiesZip(serv_data)})
-  }
-  #Least common taxonomies in state
-  if(input$Graph==6){
-    output$Plot <- renderPlot({
-      BottomTaxonomiesZip(serv_data)})
-  }
-})
+  )
 }
 
-# Run the application
-shinyApp(ui = ui, server = server)
+  # Run the application
+  shinyApp(ui = ui, server = server)
 

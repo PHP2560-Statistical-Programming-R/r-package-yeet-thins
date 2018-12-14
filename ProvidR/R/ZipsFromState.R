@@ -1,5 +1,10 @@
 #' ZipsFromState
 #' Pulls out all the zipcodes from a state
+#' This is a helper function that is used for other functions.
+#' @param "State abbreviaton"
+#' @return a list of zipcodes from the state
+#' @examples 
+#' ZipsFromState("CT")
 
 ZipsFromState<-function(state_name){
   #install required packages

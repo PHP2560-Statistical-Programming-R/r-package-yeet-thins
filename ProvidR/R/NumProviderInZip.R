@@ -1,5 +1,9 @@
 #' NumProvidersInZip
 #' This function takes a zip code and a provider taxonomy and outputs the number of providers in a zip codes
+#' @param "zipcode" and "taxonomy"
+#' @return the count of providers in a zipcode
+#' @examples 
+#' NumProvidersInZip("90210", "addiction")
 
 NumProviderInZip<-function(zipcode,taxonomy){
   #install/load required packages
