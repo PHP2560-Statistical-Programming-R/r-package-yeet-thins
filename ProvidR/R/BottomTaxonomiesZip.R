@@ -25,5 +25,6 @@ BottomTaxonomiesZip<-function(data){
     coord_flip()+
     theme_minimal()+
     labs(x = "Provider Type", y = "Number of Providers")
-  providers_bar
+  print(providers_bar + ggtitle("Taxonomies with fewest number of providers"))
 }
+
