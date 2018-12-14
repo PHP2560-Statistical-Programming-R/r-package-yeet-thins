@@ -108,7 +108,6 @@ BottomFiveZipcodes<-function(data){
     theme_minimal()+
     coord_flip()
   print(plot + ggtitle("Bottom five zip codes by provider number"))
-  return(plot)
 }
 
 TopFiveZipcodes<-function(data){
@@ -122,7 +121,6 @@ TopFiveZipcodes<-function(data){
     theme_minimal()+ 
     coord_flip()
   print(plot + ggtitle("Top five zip codes by provider number"))
-  return(plot)
 }
 
 TopTaxonomiesZip<-function(data){
@@ -199,37 +197,23 @@ server <- function(input, output) {
   data<-reactive({
     GetDataFromState(input$state, input$taxonomy)
 })
+
   
-  #highest provider coverage
-if(input$Graph==1){
-  output$dPlot <- renderPlot({
-  TopFiveZipcodes(data)})
-}
-#lowest provider coverage
-if(input$Graph==2){
-    output$Plot <- renderPlot({
-      BottomFiveZipcodes(data)})
-  }  
-  #number zip codes with high provider coverage
-  if(input$Graph==3){
-    output$Plot <- renderPlot({
-      HighProviderNumberZip(data)})
+output$Plot<-renderPlot({
+  if(input$Graph==1){
+    TopFiveZipcodes(data)
+  } else if(input$Graph==2){
+    BottomFiveZipcodes(data)
+  } else if(input$Graph==3){
+    HighProviderNumberZip(data)
+  } else if(input$Graph==4){
+    LowProviderNumberZip(data)
+  } else if(input$Graph==5){
+    TopTaxonomiesZip(data)
+  } else if(input$Graph==6){
+    BottomTaxonomiesZip(data)
   }
-  #Number of zip codes with low provider coverage
-  if(input$Graph==4){
-    output$Plot <- renderPlot({
-      LowProviderNumberZip(data)})
-  }
-  #Most common taxonomies in state
-  if(input$Graph==5){
-    output$Plot <- renderPlot({
-      TopTaxonomiesZip(data)})
-  }
-  #Least common taxonomies in state
-  if(input$Graph==6){
-    output$Plot <- renderPlot({
-      BottomTaxonomiesZip(data)})
-  }
+})
   })
 }
 
