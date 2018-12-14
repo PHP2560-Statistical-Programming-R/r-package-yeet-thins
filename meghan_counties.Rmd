@@ -22,7 +22,7 @@ SummaryByCounty<-function(state, taxonomy){
 
 ```{r}
 BottomFiveProviderDensities<-function(data){
-  counts_holder<-prov.dat%>%
+  counts_holder<-data%>%
   group_by(CTYNAME) %>% 
 count() %>%
 arrange(n) 
@@ -40,7 +40,7 @@ BottomFiveProviderDensities(testdata)
 
 ```{r}
 TopFiveProviderDensities<-function(data){
-  counts_holder<-prov.dat%>%
+  counts_holder<-data%>%
   group_by(CTYNAME) %>% 
 count() %>%
 arrange(desc(n)) 
