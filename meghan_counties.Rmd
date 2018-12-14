@@ -1,0 +1,59 @@
+---
+title: "meghan_countygraphs"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+SummaryByCounty<-function(state, taxonomy){
+  prov.dat <- ProviderInStateByCounty(state,taxonomy)
+  #process data
+  rows <- prov.dat %>%
+    filter(Abbreviation==state) %>%
+    group_by(CTYNAME, STNAME, POPESTIMATE2010, state.name) %>%
+    count() %>%
+    select(CTYNAME, POPESTIMATE2010, STNAME, state.name, n) %>%
+    mutate(provider_density = n/POPESTIMATE2010*1000) %>%
+    arrange(n)
+  return(rows)
+}
+
+```{r}
+BottomFiveProviderDensities<-function(data){
+  counts_holder<-prov.dat%>%
+  group_by(CTYNAME) %>% 
+count() %>%
+arrange(n) 
+  counts<-head(counts_holder)
+plot<-ggplot(counts, aes(x=CTYNAME, y=provider_density))+
+geom_bar(stat="identity", fill = "blue") + labs(x = "County", y = "Number of providers")+
+    theme_minimal()+
+  coord_flip()
+print(plot + ggtitle("Bottom five counties by provider number"))
+return(plot)
+}
+
+BottomFiveProviderDensities(testdata)
+```
+
+```{r}
+TopFiveProviderDensities<-function(data){
+  counts_holder<-prov.dat%>%
+  group_by(CTYNAME) %>% 
+count() %>%
+arrange(desc(n)) 
+  counts<-head(counts_holder)
+plot<-ggplot(counts, aes(x=CTYNAME, y=provider_density))+
+geom_bar(stat="identity", fill = "blue") + labs(x = "County", y = "Number of providers")+
+    theme_minimal()+ 
+  coord_flip()
+print(plot + ggtitle("Top five counties by provider number"))
+return(plot)
+}
+
+TopFiveProviderDensities(testdata)
+```
+
+
