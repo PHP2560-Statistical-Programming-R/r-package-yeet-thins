@@ -26,5 +26,6 @@ TopTaxonomiesZip<-function(data){
     labs(x = "Provider Type", y = "Number of Providers")+
     theme_minimal() + 
     coord_flip()
-  providers_bar
+  print(providers_bar + ggtitle("Number providers by taxonomy"))
+}    
 } 
