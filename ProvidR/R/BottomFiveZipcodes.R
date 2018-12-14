@@ -7,6 +7,15 @@
 #'BottomFiveZipcodes(Data)
 
 BottomFiveZipcodes<-function(data){
+  #install/load required packages
+  if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  if(!require(ggplot2)){
+    install.packages("ggplot2")
+    library(ggplot2)
+  }
   counts_holder<-data%>%
     group_by(zipcode) %>% 
     count() %>%

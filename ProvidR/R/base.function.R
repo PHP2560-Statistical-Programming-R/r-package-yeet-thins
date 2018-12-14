@@ -1,21 +1,31 @@
-#BaseFunction
-
-library(rvest)
-library(httr)
-library(dplyr)
-library(jsonlite)
-library(XML)
-library(stringr)
-library(zipcode)
-library(dplyr)
-library(stringr)
-library(ggplot2)
-library(stringi)
-library(roxygen2)
-library(testthat)
-library(repmis)
+#'NPIcode_taxonomy
+#'This is the base function that created many of our further functions. 
 
 NPIcode_taxonomy<-function(zipcode,taxonomy){
+  if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  
+  if(!require(rvest)){
+    install.packages("rvest")
+    library(rvest)
+  }
+  
+  if(!require(XML)){
+    install.packages("XML")
+    library(XML)
+  }
+  
+  if(!require(stringr)){
+    install.packages("stringr")
+    library(stringr)
+  }
+  
+  if(!require(stringi)){
+    install.packages("stringri")
+    library(stringi)
+  }
 load("ProvidR/Data/zcta_county_rel_10.Rda")
 load("ProvidR/Data/co_est2017.Rda")
 zip_link = zcta_county_rel_10
