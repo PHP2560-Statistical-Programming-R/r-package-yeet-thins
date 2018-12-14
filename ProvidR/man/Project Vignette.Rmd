@@ -92,6 +92,21 @@ data<-GetDataFromState("RI","mental health")
 BottomTaxonomiesZip(data)
 ```
 
+
+<strong>BottomFiveProviderDensities</strong>
+This function allows you to output a visualization of the bottom five lowest provider densities in a state given a taxonomy. 
+```{r}
+data<-SummaryByCounty<-function(state, taxonomy)
+BottomFiveProviderDensities(data)
+```
+  
+<strong>TopFiveProviderDensities</>
+This function allows you to output a visualization of the top five highest provider densities in a state given a taxonomy. 
+```{r}
+data<-SummaryByCounty<-function(state, taxonomy)
+TopFiveProviderDensities(data)
+```
+
 <strong>ProvidersInStateByCounty</strong>
 This function retrns a data frame that includes the providers in a state, given a provider taxonomy, by county.
 ```{r}
@@ -109,4 +124,3 @@ This plots a heatmap of the provider density in each county in  the state.
 ```{r}
 DensityMapByCounty("RI","Primary Care")
 ```
-
