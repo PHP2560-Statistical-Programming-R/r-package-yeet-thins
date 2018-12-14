@@ -196,15 +196,17 @@ ui <- fluidPage(
 #SERVER LOGIC
 server <- function(input, output) {
   observeEvent(input$do, {
-  data<-GetDataFromState(input$state, input$taxonomy)
-
+  data<-reactive({
+    GetDataFromState(input$state, input$taxonomy)
+})
+  
   #highest provider coverage
 if(input$Graph==1){
   output$dPlot <- renderPlot({
   TopFiveZipcodes(data)})
 }
 #lowest provider coverage
-  if(input$Graph==2){
+if(input$Graph==2){
     output$Plot <- renderPlot({
       BottomFiveZipcodes(data)})
   }  
