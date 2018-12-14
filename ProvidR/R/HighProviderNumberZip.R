@@ -6,8 +6,17 @@
 #'Data<-GetDataFromState("RI", "Mental Health")
 #' HighProviderNumberZip(Data)
 
-HighProviderNumberZip<-function(data){
-  counts<-countbyzip(data)
+HighProviderNumberZip<-function(data){  
+  #load required packages
+  if(!require(dplyr)){
+  install.packages("dplyr")
+  library(dplyr)
+}
+  if(!require(ggplot2)){
+    install.packages("ggplot2")
+    library(ggplot2)
+  }
+   counts<-countbyzip(data)
   number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
     group_by(n) %>%
     count() %>%

@@ -1,4 +1,10 @@
-#checking if packages are installed; installing them if not
+#' ProviderInStateByCounty
+#' This fuction creates a data frame of the providers in a state divided by county
+#' @param "state abbreviation", "provider taxonomy"
+#' @return a data frame
+#' @examples 
+#' ProviderInStateByCounty("CA", "cardiologist")
+
 ProviderInStateByCounty<-function(state,taxonomy){
   #install/load required packages
  if(!require(dplyr)){

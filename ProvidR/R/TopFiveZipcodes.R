@@ -3,10 +3,19 @@
 #'@param the data frame create by GetDataFromState
 #'@return a graph of the five zipcodes with the most providers
 #'@examples
-#'Data<-GetDataFromState("FL", "Addiction")
+#'Data<-GetDataFromState("FL", "addiction")
 #'TopFiveZipcodes(Data)
 
 TopFiveZipcodes<-function(data){
+  if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  
+  if(!require(ggplot2)){
+    install.packages("ggplot2")
+    library(ggplot2)
+  }
   counts_holder<-data%>%
     group_by(zipcode) %>% 
     count() %>%

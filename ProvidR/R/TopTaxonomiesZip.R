@@ -7,6 +7,15 @@
 #'TopTaxonomiesZip(Data)
 
 TopTaxonomiesZip<-function(data){
+  #loading required packages
+  if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+  }
+  if(!require(ggplot2)){
+    install.packages("ggplot2")
+    library(ggplot2)
+  }
   provider_grouping<-data %>% #creating a count of practices by providers
     group_by(Primary_Taxonomy) %>% 
     count() %>%

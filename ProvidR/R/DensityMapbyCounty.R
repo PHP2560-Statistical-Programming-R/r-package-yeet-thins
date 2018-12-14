@@ -1,5 +1,9 @@
 #' DensityMapByCounty
 #' Maps providers per 1000 people by county
+#' @param "State Abbraviation", "Taxonomy"
+#' @return a heat map of the number of providers by 1,000 people by county.
+#' @examples 
+#' DensityMapCounty("RI", "mental health")
 
 DensityMapByCounty<-function(state,taxonomy) {
   dat.sum <- SummaryByCounty(state,taxonomy)
