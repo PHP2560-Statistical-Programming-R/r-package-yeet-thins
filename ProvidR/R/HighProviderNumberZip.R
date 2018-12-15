@@ -16,7 +16,7 @@ HighProviderNumberZip<-function(data){
     install.packages("ggplot2")
     library(ggplot2)
   }
-   counts<-countbyzip(data)
+   counts<-CountByZip(data)
   number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
     group_by(n) %>%
     count() %>%

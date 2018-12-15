@@ -1,5 +1,7 @@
 ```{r}
 library(ProvidR)
+```
+```{r}
 NumProviderInZip("02906", "family medicine")
 ```
 

@@ -12,11 +12,11 @@ LowProviderNumberZip<-function(data){
     library(dplyr)
   }
   
-  if(!require(gglot2)){
+  if(!require(ggplot2)){
     install.packages("ggplot2")
     library(ggplot2)
   }
-  counts<-countbyzip(data)
+  counts<-CountByZip(data)
   number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
     group_by(n) %>%
     count() %>%
