@@ -1,4 +1,8 @@
 ```{r}
+NumProviderInZip("02906", "family medicine")
+```
+
+```{r}
 DF1<-GetDataFromState("RI", "mental health")
 DF1
 CountByZip(DF1)
@@ -14,11 +18,6 @@ TopTaxonomiesZip(DF1)
 TopFiveZipcodes(DF1)
 ```
 
-```{r}
-HighProviderNumberZip(DF1)
-LowProviderNumberZip(DF1)
-```
-
 
 ```{r}
 DF2<-SummaryByCounty("RI", "mental health")
@@ -29,3 +28,4 @@ DF2
 DF3<-ProviderInStateByCounty("RI", "mental health")
 DF3
 ```
+

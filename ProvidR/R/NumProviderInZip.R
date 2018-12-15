@@ -5,7 +5,7 @@
 #' @examples 
 #' NumProvidersInZip("90210", "addiction")
 
-NumProviderInZip<-function(state, taxonomy) {
+NumProviderInZip<-function(zipcode,taxonomy){
   if(!require(dplyr)){
     install.packages("dplyr")
     library(dplyr)
@@ -21,14 +21,14 @@ NumProviderInZip<-function(state, taxonomy) {
     library(XML)
   }
   
-  if(!require(stringi)){
-    install.packages("stringi")
-    library(stringi)
-  }
-  
   if(!require(stringr)){
     install.packages("stringr")
     library(stringr)
+  }
+  
+  if(!require(stringi)){
+    install.packages("stringri")
+    library(stringi)
   }
   load("ProvidR/Data/zcta_county_rel_10.Rda")
   load("ProvidR/Data/co_est2017.Rda")
@@ -72,9 +72,6 @@ NumProviderInZip<-function(state, taxonomy) {
   NPI_join$STATE<-as.character(NPI_join$STATE)
   
   NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-  return(NPI_to_census)
-    NPI_to_census<-inner_join(NPI_join, census, by=c("STATE", "COUNTY"))
-    return(nrow(NPI_to_census))
+  return(nrow(NPI_to_census))
   }
-
 
