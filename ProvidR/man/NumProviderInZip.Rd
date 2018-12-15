@@ -5,9 +5,18 @@
 \title{NumProvidersInZip
 This function takes a zip code and a provider taxonomy and outputs the number of providers in a zip codes}
 \usage{
-NumProviderInZip(zipcode, taxonomy)
+NumProviderInZip(state, taxonomy)
+}
+\arguments{
+\item{"zipcode"}{and "taxonomy"}
+}
+\value{
+the count of providers in a zipcode
 }
 \description{
 NumProvidersInZip
 This function takes a zip code and a provider taxonomy and outputs the number of providers in a zip codes
+}
+\examples{
+NumProvidersInZip("90210", "addiction")
 }

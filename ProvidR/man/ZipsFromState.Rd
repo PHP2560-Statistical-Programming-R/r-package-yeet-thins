@@ -3,11 +3,22 @@
 \name{ZipsFromState}
 \alias{ZipsFromState}
 \title{ZipsFromState
-Pulls out all the zipcodes from a state}
+Pulls out all the zipcodes from a state
+This is a helper function that is used for other functions.}
 \usage{
 ZipsFromState(state_name)
+}
+\arguments{
+\item{"State}{abbreviaton"}
+}
+\value{
+a list of zipcodes from the state
 }
 \description{
 ZipsFromState
 Pulls out all the zipcodes from a state
+This is a helper function that is used for other functions.
+}
+\examples{
+ZipsFromState("CT")
 }
