@@ -1,4 +1,5 @@
 ```{r}
+library(ProvidR)
 NumProviderInZip("02906", "family medicine")
 ```
 
@@ -6,6 +7,10 @@ NumProviderInZip("02906", "family medicine")
 DF1<-GetDataFromState("RI", "mental health")
 DF1
 CountByZip(DF1)
+```
+```{r}
+LowProviderNumberZip(DF1)
+HighProviderNumerZip(DF1)
 ```
 
 ```{r}
