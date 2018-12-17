@@ -46,23 +46,23 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
 }
 
 countbyzip <- function(data){data %>% #creating a count of practices by zip code
-    group_by(zipcode) %>% 
-    count() %>%
-    arrange(n)%>%
+    group_by(zipcode) %>% #group by zip code
+    count() %>% #creating a count of the groups within the zipcode
+    arrange(n)%>% #arranging by n
     ungroup()
 }
 
-ZipsFromState<-function(state_name){
-  data(zipcode)
-  zip_holder<-zipcode%>%
-    filter(state==state_name)%>%
-    select(zip)
-  zip_state<-zip_holder[,1]
+ZipsFromState<-function(state_name){ #creating a function that will take the Zips from the state
+  data(zipcode) #reading data from zipcode
+  zip_holder<-zipcode%>% #assigning zipcode to a zip_holder
+    filter(state==state_name)%>% #filtering zipcodes by state name
+    select(zip) #selecting a zipcode
+  zip_state<-zip_holder[,1] #returning rows from the zip_holder
   return(zip_state)
 }
 
 #Data Functions
-GetDataFromState<-function(state, taxonomy) {
+GetDataFromState<-function(state, taxonomy) { #creating a function that inputs state and taxonomy and outputs the NPI code 
   zipcode_holder<-ZipsFromState(state)
   data<-NPIcode_taxonomy(zipcode_holder, taxonomy)
 }
