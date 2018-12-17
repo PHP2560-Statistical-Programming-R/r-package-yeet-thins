@@ -77,31 +77,38 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       helpText("ProvidR is an app created by Alexander Adia, Jackie Goldman, Kari Kusler, and Meghan Peterson. To use it, please specify a state and taxonomy and click Get Data. After a few minutes, ProvidR will tell you that it is ready to produce visualizations for you."),
-      textInput("state", label = h3("State Abbreviation"), value = "RI"),
-      
+   
+ #creating input button that will make a type in space for state abbreviation with an example of RI already written in
+            textInput("state", label = h3("State Abbreviation"), value = "RI"),
+    #creating a space to text input a state name 
       hr(),
       fluidRow(column(3, verbatimTextOutput("value"))),
       
+  #creating input button that will make a type in space for taxonomy with an example of mental health already written in
       textInput("taxonomy", label = h3("Taxonomy"), value = "Mental Health"),
-      
+
+ #creat an action button that will allow you to get the data 
       actionButton("data", "Get Data"),
       #graphing options
+ 
+ #create a list of options for graphs that are linked to the visualizations
       radioButtons("graph", label = h3("Graphing Option"),
                    choices = list("Zip codes with high provider coverage" = 1, "Zip codes with low provider coverage" = 2, "Top 5 zip codes with high provider coverage" = 3, "Top 5 zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
                    selected = 1),
-      #action button
+#action button that will show a visualization
       actionButton("do", "Get Visualization")
     ),
     
-    # Show a plot 
+#create a main panel where visualizations and data will show up
     mainPanel(h3("Results"),
+#create text output under the name "text" and a plot output under the name "plot"
               textOutput("text"),
               plotOutput("plot")
     )
   )
 )
 
-# Define server logic 
+# Define server logic using the dataframe with the function "GetDataFromStata" by inputing the column of state and taxonomy
 server <- function(input, output) {
   observeEvent(input$data, {
     dataframe<<-GetDataFromState(input$state, input$taxonomy)
@@ -113,6 +120,7 @@ server <- function(input, output) {
   
   observeEvent(input$do, {
 
+#creating an input for a graph that will show zip codes with the highest number of providers 
     if(input$graph==1){
       counts<-countbyzip(dataframe)
       number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
@@ -125,8 +133,9 @@ server <- function(input, output) {
         theme_minimal()+
         labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with high numbers of providers")
       
-      
-      output$plot <- renderPlot({print(plot1)})
+    
+      #creating an output plot for graph showing the numbers of zip codes with low number of providers  
+      output$plot <- renderPlot({print(plot1)}) 
     } else if(input$graph==2){
       counts<-countbyzip(dataframe)
       number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
@@ -135,7 +144,7 @@ server <- function(input, output) {
         arrange(n) #arranging by frequency
       number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
       
-      plot2<-ggplot(number_practices.low, aes(x=n, y=nn))+
+      plot2<-ggplot(number_practices.low, aes(x=n, y=nn))+ #taking the low number of practices in "plot 2" and making a graph
         geom_bar(stat="identity", fill="blue", position=position_dodge()) + labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with low numbers of providers")+
         theme_minimal()
       output$plot <- renderPlot({print(plot2)})
@@ -156,7 +165,8 @@ server <- function(input, output) {
         count() %>%
         arrange(n) 
       counts<-head(counts_holder)
-      
+ 
+  #making a plot showing zip codes with low numbers of providers      
       plot4<-ggplot(counts, aes(x=zipcode, y=n))+
         geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers", title="Bottom five zip codes by provider number")+
         theme_minimal()+
