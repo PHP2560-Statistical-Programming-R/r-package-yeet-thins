@@ -12,7 +12,7 @@ CountByZip(DF1)
 ```
 ```{r}
 LowProviderNumberZip(DF1)
-HighProviderNumerZip(DF1)
+HighProviderNumberZip(DF1)
 ```
 
 ```{r}
