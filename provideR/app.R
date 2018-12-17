@@ -18,7 +18,7 @@ library(zipcode)
 library(dplyr)
 library(stringr)
 library(ggplot2)
-
+library(beepr)
 #setting up helper functions
 NPIcode_taxonomy<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
@@ -76,7 +76,7 @@ ui <- fluidPage(
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-      helpText("ProvidR is an app created by Alexander Adia, Jackie Goldman, Kari Kusler, and Meghan Peterson. To use it, please specify a state and taxonomy and click Get Data. After a few minutes, ProvidR will tell you that it is ready to produce visualizations for you."),
+      helpText("ProvidR is an app created by Alexander Adia, Jackie Goldman, Kari Kusler, and Meghan Peterson. To use it, please specify a state and taxonomy and click Get Data. After a few minutes, ProvidR will tell you that it is ready to produce visualizations for you. Please be patient as the data pulls."),
    
  #creating input button that will make a type in space for state abbreviation with an example of RI already written in
             textInput("state", label = h3("State Abbreviation"), value = "RI"),
@@ -110,10 +110,13 @@ ui <- fluidPage(
 
 # Define server logic using the dataframe with the function "GetDataFromStata" by inputing the column of state and taxonomy
 server <- function(input, output) {
+
   observeEvent(input$data, {
     dataframe<<-GetDataFromState(input$state, input$taxonomy)
     if(!is.null(dataframe)){
       output$text<-renderText("ProvidR is ready for visualizations!")
+      #beeps when ready
+      beep()
     }
   }
                )
