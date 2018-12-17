@@ -18,7 +18,6 @@ library(zipcode)
 library(dplyr)
 library(stringr)
 library(ggplot2)
-library(beepr)
 
 #setting up helper functions
 NPIcode_taxonomy<-function(zipcode,taxonomy){
@@ -27,15 +26,15 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   skips <- seq(0,9999999,100) #create skips
   for (i in 1:length(zipcode)) { #iterating over all RI zip codes
     for (j in 1:length(skips)) { #also iterating over skils
-      zip <- zipcode[i]
-      skip <- skips[j]
+      zip <- zipcode[i] #storing zipcodes in zip
+      skip <- skips[j] 
       tax <- str_replace_all(taxonomy," ","+")
       url<-paste0(url1,zip,"&skip=",skip,"&taxonomy_description=",tax) #pasting the url, with the rhode island zip code and including the skips
       #text scrape to pull our places by zip code
-      h <- read_html(url, timeout = 10000000)
+      h <- read_html(url, timeout = 10000000) #reading the url as html and storing it in h with timeout set
       reps <- h %>% #setting up the repeating structure
         html_node("table") %>%
-        html_table()
+        html_table() 
       if (any(is.na(reps[,1])) | all(is.na(reps[,1]))) { #if the page has no physicians, move to next zip code
         break}
       reps$zip <- zipcode[i]
@@ -43,7 +42,7 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
     }
   }
   colnames(provider.data) <- c("NPI","Name","NPI_Type","Primary_Practice_Address","Phone","Primary_Taxonomy","zipcode")
-  return(provider.data)
+  return(provider.data) #returning a dataset that shows all of the provider
 }
 
 countbyzip <- function(data){data %>% #creating a count of practices by zip code
@@ -108,7 +107,6 @@ server <- function(input, output) {
     dataframe<<-GetDataFromState(input$state, input$taxonomy)
     if(!is.null(dataframe)){
       output$text<-renderText("ProvidR is ready for visualizations!")
-      beep()
     }
   }
                )
