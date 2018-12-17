@@ -76,7 +76,7 @@ ui <- fluidPage(
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-      helpText("Please input a state abbreviation, a taxonomy, and a graphing option. ProvidR will return a visualization."),
+      helpText("ProvidR is an app created by Alexander Adia, Jackie Goldman, Kari Kusler, and Meghan Peterson. To use it, please specify a state and taxonomy and click Get Data. After a few minutes, ProvidR will tell you that it is ready to produce visualizations for you."),
       textInput("state", label = h3("State Abbreviation"), value = "RI"),
       
       hr(),
@@ -84,6 +84,7 @@ ui <- fluidPage(
       
       textInput("taxonomy", label = h3("Taxonomy"), value = "Mental Health"),
       
+      actionButton("data", "Get Data"),
       #graphing options
       radioButtons("graph", label = h3("Graphing Option"),
                    choices = list("Zip codes with high provider coverage" = 1, "Zip codes with low provider coverage" = 2, "Top 5 zip codes with high provider coverage" = 3, "Top 5 zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
@@ -94,6 +95,7 @@ ui <- fluidPage(
     
     # Show a plot 
     mainPanel(h3("Results"),
+              textOutput("text"),
               plotOutput("plot")
     )
   )
@@ -101,10 +103,16 @@ ui <- fluidPage(
 
 # Define server logic 
 server <- function(input, output) {
+  observeEvent(input$data, {
+    dataframe<<-GetDataFromState(input$state, input$taxonomy)
+    if(!is.null(dataframe)){
+      output$text<-renderText("ProvidR is ready for visualizations!")
+    }
+  }
+               )
   
   observeEvent(input$do, {
-    dataframe<-GetDataFromState(input$state, input$taxonomy)
-    
+
     if(input$graph==1){
       counts<-countbyzip(dataframe)
       number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
