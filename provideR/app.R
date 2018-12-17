@@ -18,6 +18,7 @@ library(zipcode)
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(beepr)
 
 #setting up helper functions
 NPIcode_taxonomy<-function(zipcode,taxonomy){
@@ -107,6 +108,7 @@ server <- function(input, output) {
     dataframe<<-GetDataFromState(input$state, input$taxonomy)
     if(!is.null(dataframe)){
       output$text<-renderText("ProvidR is ready for visualizations!")
+      beep()
     }
   }
                )
