@@ -148,63 +148,63 @@ server <- function(input, output) {
   
       plot2<-ggplot(number_practices.low, aes(x=n, y=nn))+ #taking the low number of practices in "plot 2" and making a graph
         geom_bar(stat="identity", fill="blue", position=position_dodge()) + labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with low numbers of providers")+
-        theme_minimal()
+        theme_minimal() #change aesthetics
       output$plot <- renderPlot({print(plot2)})
     } else if(input$graph==3){
       counts_holder<-dataframe%>%
-        group_by(zipcode) %>% 
-        count() %>%
-        arrange(desc(n)) 
-      counts<-head(counts_holder)
+        group_by(zipcode) %>% #group by zipcode
+        count() %>% #count total number
+        arrange(desc(n)) #arrange total number so that they are in descending order
+      counts<-head(counts_holder) #store counts in a holder 
       
 #plot3 takes the top five places with highest number of providers 
       plot3<-ggplot(counts, aes(x=zipcode, y=n))+
         geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers", title= "Top five zip codes by provider number")+
-        theme_minimal()+ 
+        theme_minimal()+ #change aesthetic
         coord_flip()
       output$plot <- renderPlot({print(plot3)})
     } else if(input$graph==4){
       counts_holder<-dataframe%>%
-        group_by(zipcode) %>% 
-        count() %>%
-        arrange(n) 
+        group_by(zipcode) %>%  #group by zipcode
+        count() %>% #count the number of zipcodes 
+        arrange(n)  #arrange by number
       counts<-head(counts_holder)
  
   #making a plot showing zip codes with low numbers of providers      
       plot4<-ggplot(counts, aes(x=zipcode, y=n))+
         geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers", title="Bottom five zip codes by provider number")+
-        theme_minimal()+
+        theme_minimal()+ #change aesthetics
         coord_flip()
-      output$plot <- renderPlot({print(plot4)})
+      output$plot <- renderPlot({print(plot4)}) #output plot4, showing count of zipcodes with low number of providers 
     } else if(input$graph==5){
       
 #creating a plot showing count of practcies by both provider and taxonomy
-      provider_grouping<-dataframe %>% 
-        group_by(Primary_Taxonomy) %>% 
-        count() %>%
-        arrange(desc(n))
-      top5providers<-head(provider_grouping)
+      provider_grouping<-dataframe %>% #take dataframe and store in provider_grouping
+        group_by(Primary_Taxonomy) %>% #arrange by type of provider
+        count() %>% #count number of each taxonomy
+        arrange(desc(n)) #arrange in descending order
+      top5providers<-head(provider_grouping) #take head of providers that appear most frequently
       
       plot5<-ggplot(top5providers, aes(x=Primary_Taxonomy, y=n))+
-        geom_bar(stat="identity", fill = "blue")+
+        geom_bar(stat="identity", fill = "blue")+ #change aesthetics
         labs(x = "Provider Type", y = "Number of Providers", title="Top Provider Type in the Taxonomy")+
         theme_minimal() + 
         coord_flip()
-      output$plot <- renderPlot({print(plot5)})
+      output$plot <- renderPlot({print(plot5)}) #print plot of top fix providers 
 
 #creating a list showing the lowest number of providers by taxonomy
       
     } else if(input$graph==6){
       provider_grouping<-dataframe %>% #creating a count of practices by providers
-        group_by(Primary_Taxonomy) %>% 
-        count() %>%
-        arrange(n)
-      bottom5providers<-head(provider_grouping)
+        group_by(Primary_Taxonomy) %>%  #arrange by taxonomy
+        count() %>% #count number of taxonomies
+        arrange(n) #arrange by number of taxonomies
+      bottom5providers<-head(provider_grouping) #show top providers in the bottom of the list 
       
 #taking list of lowest number of providers by taxonomy and outputting as a plot      
     
       plot6<- ggplot(bottom5providers, aes(x=Primary_Taxonomy, y=n))+
-        geom_bar(stat="identity", fill = "blue")+
+        geom_bar(stat="identity", fill = "blue")+ #change aesthetics 
         coord_flip()+
         theme_minimal()+
         labs(x = "Provider Type", y = "Number of Providers", title="Least Common Provider Type in the Taxonomy")
