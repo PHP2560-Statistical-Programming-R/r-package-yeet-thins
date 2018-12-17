@@ -132,10 +132,10 @@ server <- function(input, output) {
         geom_bar(stat="identity", fill = "blue")+
         theme_minimal()+
         labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with high numbers of providers")
-      
-    
-      #creating an output plot for graph showing the numbers of zip codes with low number of providers  
-      output$plot <- renderPlot({print(plot1)}) 
+            output$plot <- renderPlot({print(plot1)}) 
+            
+#creating an output plot for graph showing the numbers of zip codes with low number of providers  
+            
     } else if(input$graph==2){
       counts<-countbyzip(dataframe)
       number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
@@ -143,7 +143,9 @@ server <- function(input, output) {
         count() %>%
         arrange(n) #arranging by frequency
       number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
-      
+
+  #creating a plot that shows zip codes with a low number of practices 
+  
       plot2<-ggplot(number_practices.low, aes(x=n, y=nn))+ #taking the low number of practices in "plot 2" and making a graph
         geom_bar(stat="identity", fill="blue", position=position_dodge()) + labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with low numbers of providers")+
         theme_minimal()
@@ -154,6 +156,8 @@ server <- function(input, output) {
         count() %>%
         arrange(desc(n)) 
       counts<-head(counts_holder)
+      
+#plot3 takes the top five places with highest number of providers 
       plot3<-ggplot(counts, aes(x=zipcode, y=n))+
         geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers", title= "Top five zip codes by provider number")+
         theme_minimal()+ 
@@ -173,7 +177,9 @@ server <- function(input, output) {
         coord_flip()
       output$plot <- renderPlot({print(plot4)})
     } else if(input$graph==5){
-      provider_grouping<-dataframe %>% #creating a count of practices by providers
+      
+#creating a plot showing count of practcies by both provider and taxonomy
+      provider_grouping<-dataframe %>% 
         group_by(Primary_Taxonomy) %>% 
         count() %>%
         arrange(desc(n))
@@ -185,6 +191,9 @@ server <- function(input, output) {
         theme_minimal() + 
         coord_flip()
       output$plot <- renderPlot({print(plot5)})
+
+#creating a list showing the lowest number of providers by taxonomy
+      
     } else if(input$graph==6){
       provider_grouping<-dataframe %>% #creating a count of practices by providers
         group_by(Primary_Taxonomy) %>% 
@@ -192,7 +201,8 @@ server <- function(input, output) {
         arrange(n)
       bottom5providers<-head(provider_grouping)
       
-      
+#taking list of lowest number of providers by taxonomy and outputting as a plot      
+    
       plot6<- ggplot(bottom5providers, aes(x=Primary_Taxonomy, y=n))+
         geom_bar(stat="identity", fill = "blue")+
         coord_flip()+
