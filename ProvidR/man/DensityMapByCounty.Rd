@@ -7,7 +7,16 @@ Maps providers per 1000 people by county}
 \usage{
 DensityMapByCounty(state, taxonomy)
 }
+\arguments{
+\item{"State}{Abbraviation", "Taxonomy"}
+}
+\value{
+a heat map of the number of providers by 1,000 people by county.
+}
 \description{
 DensityMapByCounty
 Maps providers per 1000 people by county
+}
+\examples{
+DensityMapCounty("RI", "mental health")
 }

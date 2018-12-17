@@ -28,4 +28,3 @@ TopTaxonomiesZip<-function(data){
     coord_flip()
   print(providers_bar + ggtitle("Number providers by taxonomy"))
 }    
-} 

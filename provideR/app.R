@@ -7,8 +7,6 @@
 #    http://shiny.rstudio.com/
 #
 
-
-#loading libraries
 library(shiny)
 library(rvest)
 library(httr)
@@ -27,7 +25,7 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
   provider.data <- data.frame() #initializing an empty data frame
   skips <- seq(0,9999999,100) #create skips
   for (i in 1:length(zipcode)) { #iterating over all RI zip codes
-    for (j in 1:length(skips)){ #also iterating over skils
+    for (j in 1:length(skips)) { #also iterating over skils
       zip <- zipcode[i]
       skip <- skips[j]
       tax <- str_replace_all(taxonomy," ","+")
@@ -48,9 +46,10 @@ NPIcode_taxonomy<-function(zipcode,taxonomy){
 }
 
 countbyzip <- function(data){data %>% #creating a count of practices by zip code
-    group_by(zipcode) %>%
+    group_by(zipcode) %>% 
     count() %>%
-    arrange(n)
+    arrange(n)%>%
+    ungroup()
 }
 
 ZipsFromState<-function(state_name){
@@ -68,168 +67,123 @@ GetDataFromState<-function(state, taxonomy) {
   data<-NPIcode_taxonomy(zipcode_holder, taxonomy)
 }
 
-
-#Processing Functions
-LowProviderNumberZip<-function(data){
-  counts<-countbyzip(data)
-  number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
-    group_by(n) %>%
-    count() %>%
-    arrange(n) #arranging by frequency
-  number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
-  plot<-ggplot(number_practices.low, aes(x=n, y=nn))+
-    geom_bar(stat="identity", fill="blue", position=position_dodge()) + labs(x = "Number of providers", y = "Number of zip codes")+
-    theme_minimal()
-  print(plot + ggtitle("Zip codes with low numbers of providers"))
-}
-
-HighProviderNumberZip<-function(data){
-  counts<-countbyzip(data)
-  number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
-    group_by(n) %>%
-    count() %>%
-    arrange(desc(n)) #arranging by frequency
-  number_practices.high <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
-  plot<-ggplot(number_practices.high, aes(x=n, y=nn))+
-    geom_bar(stat="identity", fill = "blue")+
-    theme_minimal()+
-    labs(x = "Number of providers", y = "Number of zip codes")
-  print(plot + ggtitle("Zip codes with high numbers of providers"))
-}
-
-BottomFiveZipcodes<-function(data){
-  counts_holder<-data%>%
-    group_by(zipcode) %>%
-    count() %>%
-    arrange(n)
-  counts<-head(counts_holder)
-  plot<-ggplot(counts, aes(x=zipcode, y=n))+
-    geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers")+
-    theme_minimal()+
-    coord_flip()
-  print(plot + ggtitle("Bottom five zip codes by provider number"))
-}
-
-TopFiveZipcodes<-function(data){
-  counts_holder<-data%>%
-    group_by(zipcode) %>%
-    count() %>%
-    arrange(desc(n))
-  counts<-head(counts_holder)
-  plot<-ggplot(counts, aes(x=zipcode, y=n))+
-    geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers")+
-    theme_minimal()+
-    coord_flip()
-  print(plot + ggtitle("Top five zip codes by provider number"))
-}
-
-TopTaxonomiesZip<-function(data){
-  provider_grouping<-data %>% #creating a count of practices by providers
-    group_by(Primary_Taxonomy) %>%
-    count() %>%
-    arrange(desc(n))
-  top5providers<-head(provider_grouping)
-  providers_bar<-ggplot(top5providers, aes(x=Primary_Taxonomy, y=n))+
-    geom_bar(stat="identity", fill = "blue")+
-    labs(x = "Provider Type", y = "Number of Providers")+
-    theme_minimal() +
-    coord_flip()
-  providers_bar
-}
-
-BottomTaxonomiesZip<-function(data){
-  provider_grouping<-data %>% #creating a count of practices by providers
-    group_by(Primary_Taxonomy) %>%
-    count() %>%
-    arrange(n)
-  bottom5providers<-head(provider_grouping)
-  providers_bar<-ggplot(bottom5providers, aes(x=Primary_Taxonomy, y=n))+
-    geom_bar(stat="identity", fill = "blue")+
-    coord_flip()+
-    theme_minimal()+
-    labs(x = "Provider Type", y = "Number of Providers")
-  providers_bar
-}
-
-#SHINY APP#
-
-
-#Defining the UI
+# Define UI for application that draws a histogram
 ui <- fluidPage(
-
+  
   # Application title
-  titlePanel("ProvidR: Visualizing Providers of a Given Type in a County or State"),
-
-  # Sidebar with a slider input for number of bins d
+  titlePanel("ProvidR: Visualizing Providers of a Given Type in a State"),
+  
+  # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
       helpText("Please input a state abbreviation, a taxonomy, and a graphing option. ProvidR will return a visualization."),
       textInput("state", label = h3("State Abbreviation"), value = "RI"),
-
+      
       hr(),
       fluidRow(column(3, verbatimTextOutput("value"))),
-
-      textInput("Taxonomy", label = h3("Taxonomy"), value = "Mental Health"),
-
-      hr(),
-      fluidRow(column(3, verbatimTextOutput("value"))),
-
-      radioButtons("Graph", label = h3("Graphing Option"),
-                  choices = list("Zip codes with highest provider coverage" = 1, "Zip codes with lowest provider coverage" = 2, "Number of zip codes with high provider coverage" = 3, "Number of zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
-                  selected = 1),
-
-      hr(),
-      fluidRow(column(3, verbatimTextOutput("value"))),
-    actionButton("do", "Get Visualization")
+      
+      textInput("taxonomy", label = h3("Taxonomy"), value = "Mental Health"),
+      
+      #graphing options
+      radioButtons("graph", label = h3("Graphing Option"),
+                   choices = list("Zip codes with high provider coverage" = 1, "Zip codes with low provider coverage" = 2, "Top 5 zip codes with high provider coverage" = 3, "Top 5 zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
+                   selected = 1),
+      #action button
+      actionButton("do", "Get Visualization")
     ),
-    # Show a plot of the generated distribution
-    mainPanel("Results",
-      plotOutput("plot")
+    
+    # Show a plot 
+    mainPanel(h3("Results"),
+              plotOutput("plot")
     )
   )
 )
 
-
-
-#SERVER LOGIC
+# Define server logic 
 server <- function(input, output) {
+  
   observeEvent(input$do, {
-  serv_data<-GetDataFromState(input$state,input$Taxonomy)
-  
-  
-  #highest provider coverage
-  if(input$Graph==1){
-    output$Plot <- renderPlot({
-      TopFiveZipcodes(serv_data)})
-  }
-  #lowest provider coverage
-  if(input$Graph==2){
-    output$Plot <- renderPlot({
-      BottomFiveZipcodes(serv_data)})
-  }  
-  #number zip codes with high provider coverage
-  if(input$Graph==3){
-    output$Plot <- renderPlot({
-      HighProviderNumberZip(serv_data)})
-  }
-  #Number of zip codes with low provider coverage
-  if(input$Graph==4){
-    output$Plot <- renderPlot({
-      LowProviderNumberZip(serv_data)})
-  }
-  #Most common taxonomies in state
-  if(input$Graph==5){
-    output$Plot <- renderPlot({
-      TopTaxonomiesZip(serv_data)})
-  }
-  #Least common taxonomies in state
-  if(input$Graph==6){
-    output$Plot <- renderPlot({
-      BottomTaxonomiesZip(serv_data)})
-  }
-})
+    dataframe<-GetDataFromState(input$state, input$taxonomy)
+    
+    if(input$graph==1){
+      counts<-countbyzip(dataframe)
+      number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
+        group_by(n) %>%
+        count() %>%
+        arrange(desc(n)) #arranging by frequency
+      number_practices.high <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
+      plot1<-ggplot(number_practices.high, aes(x=n, y=nn))+
+        geom_bar(stat="identity", fill = "blue")+
+        theme_minimal()+
+        labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with high numbers of providers")
+      
+      
+      output$plot <- renderPlot({print(plot1)})
+    } else if(input$graph==2){
+      counts<-countbyzip(dataframe)
+      number_practices<-counts%>%select(n) %>% #selecting and grouping by frequency
+        group_by(n) %>%
+        count() %>%
+        arrange(n) #arranging by frequency
+      number_practices.low <- head(number_practices) #getting the first rows of the number_pratices and desingnating them as low numbers of practices
+      
+      plot2<-ggplot(number_practices.low, aes(x=n, y=nn))+
+        geom_bar(stat="identity", fill="blue", position=position_dodge()) + labs(x = "Number of providers", y = "Number of zip codes", title="Zip codes with low numbers of providers")+
+        theme_minimal()
+      output$plot <- renderPlot({print(plot2)})
+    } else if(input$graph==3){
+      counts_holder<-dataframe%>%
+        group_by(zipcode) %>% 
+        count() %>%
+        arrange(desc(n)) 
+      counts<-head(counts_holder)
+      plot3<-ggplot(counts, aes(x=zipcode, y=n))+
+        geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers", title= "Top five zip codes by provider number")+
+        theme_minimal()+ 
+        coord_flip()
+      output$plot <- renderPlot({print(plot3)})
+    } else if(input$graph==4){
+      counts_holder<-dataframe%>%
+        group_by(zipcode) %>% 
+        count() %>%
+        arrange(n) 
+      counts<-head(counts_holder)
+      
+      plot4<-ggplot(counts, aes(x=zipcode, y=n))+
+        geom_bar(stat="identity", fill = "blue") + labs(x = "Zipcode", y = "Number of providers", title="Bottom five zip codes by provider number")+
+        theme_minimal()+
+        coord_flip()
+      output$plot <- renderPlot({print(plot4)})
+    } else if(input$graph==5){
+      provider_grouping<-dataframe %>% #creating a count of practices by providers
+        group_by(Primary_Taxonomy) %>% 
+        count() %>%
+        arrange(desc(n))
+      top5providers<-head(provider_grouping)
+      
+      plot5<-ggplot(top5providers, aes(x=Primary_Taxonomy, y=n))+
+        geom_bar(stat="identity", fill = "blue")+
+        labs(x = "Provider Type", y = "Number of Providers", title="Top Provider Type in the Taxonomy")+
+        theme_minimal() + 
+        coord_flip()
+      output$plot <- renderPlot({print(plot5)})
+    } else if(input$graph==6){
+      provider_grouping<-dataframe %>% #creating a count of practices by providers
+        group_by(Primary_Taxonomy) %>% 
+        count() %>%
+        arrange(n)
+      bottom5providers<-head(provider_grouping)
+      
+      
+      plot6<- ggplot(bottom5providers, aes(x=Primary_Taxonomy, y=n))+
+        geom_bar(stat="identity", fill = "blue")+
+        coord_flip()+
+        theme_minimal()+
+        labs(x = "Provider Type", y = "Number of Providers", title="Least Common Provider Type in the Taxonomy")
+      output$plot <- renderPlot({print(plot6)})
+    }
+  })
 }
 
-# Run the application
+# Run the application 
 shinyApp(ui = ui, server = server)
-

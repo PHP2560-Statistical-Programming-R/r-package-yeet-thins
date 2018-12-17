@@ -17,3 +17,7 @@ a bar graph of the zip codes with the lowest number of providers in a state.
 LowProviderNumberZip
 This function outputs a visualization of the zip codes with the lowest number of providers in a state (with at least one provider minimum in the zip code)
 }
+\examples{
+Data<-GetDataFromState("LA", "primary care")
+LowProviderNumberZip(Data)
+}

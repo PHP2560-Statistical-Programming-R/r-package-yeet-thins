@@ -18,6 +18,6 @@ TopFiveZipcodes
 This function, given a data frame created with GetDataFromState, creates a vizualtation of the five zipcodes with the most providers
 }
 \examples{
-Data<-GetDataFromState("FL", "Addiction")
+Data<-GetDataFromState("FL", "addiction")
 TopFiveZipcodes(Data)
 }
