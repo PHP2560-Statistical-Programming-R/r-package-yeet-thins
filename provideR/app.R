@@ -84,6 +84,7 @@ ui <- fluidPage(
       
       textInput("taxonomy", label = h3("Taxonomy"), value = "Mental Health"),
       
+      actionButton("data", "Get Data"),
       #graphing options
       radioButtons("graph", label = h3("Graphing Option"),
                    choices = list("Zip codes with high provider coverage" = 1, "Zip codes with low provider coverage" = 2, "Top 5 zip codes with high provider coverage" = 3, "Top 5 zip codes with low provider coverage"= 4, "Most common taxonomies in state" = 5, "Least common taxonomies in state"=6),
@@ -94,6 +95,7 @@ ui <- fluidPage(
     
     # Show a plot 
     mainPanel(h3("Results"),
+              textOutput("text")
               plotOutput("plot")
     )
   )
@@ -101,6 +103,13 @@ ui <- fluidPage(
 
 # Define server logic 
 server <- function(input, output) {
+  observeEvent(input$data, {
+    dataframe<-GetDataFromState(input$state, input$taxonomy)
+    if(!is.null(dataframe)){
+      output$text<-renderText("ProvidR is ready for Visualizations")
+    }
+  }
+               )
   
   observeEvent(input$do, {
     dataframe<-GetDataFromState(input$state, input$taxonomy)
