@@ -1,0 +1,11 @@
+---
+title: "Launch Code"
+author: "Alexander Adia"
+date: "2/10/2019"
+output: html_document
+---
+
+```{r}
+library(rsconnect)
+rsconnect::deployApp('path/to/your/app')
+```
