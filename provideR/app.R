@@ -19,6 +19,7 @@ library(dplyr)
 library(stringr)
 library(ggplot2)
 library(beepr)
+library(rsconnect)
 #setting up helper functions
 NPIcode_taxonomy<-function(zipcode,taxonomy){
   url1<- "https://npiregistry.cms.hhs.gov/registry/search-results-table?addressType=ANY&postal_code=" #setting the url to scrape from
@@ -218,3 +219,4 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+rsconnect::deployApp('/Users/alexadia/Documents/Brown/Sem\ IX/R/r-package-yeet-thins/provideR/app.R⁩')
